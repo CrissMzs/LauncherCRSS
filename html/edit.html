@@ -1,14 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editar Juego</title>
+  <link rel="stylesheet" href="../css/editModal.css">
 </head>
 <body>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae, itaque. Consectetur sapiente eius temporibus! At aliquam, aperiam consequatur consectetur necessitatibus laborum ab saepe, eum expedita ducimus, animi accusamus voluptates assumenda?</p>
-     <script>
-        
-     </script>
+  <h1>Editar juego</h1>
+  <form id="edit-form">
+    <label>
+      ID único:
+      <input type="text" id="game-id" required />
+    </label>
+
+    <label>
+      Título:
+      <input type="text" id="game-title" required />
+    </label>
+
+    <label>
+      Tipo:
+      <input type="text" id="game-type" />
+    </label>
+
+    <label>
+      Ruta o URL de lanzamiento:
+      <div class="input-with-button">
+        <input type="text" id="game-url" placeholder="steam://... o ruta a .exe / .lnk" />
+        <button type="button" id="browse-btn">Seleccionar...</button>
+      </div>
+    </label>
+
+    <label>
+      Icono:
+      <div class="input-with-button">
+        <input type="text" id="icon-path" readonly placeholder="Selecciona imagen..." />
+        <button type="button" id="select-icon">Elegir</button>
+      </div>
+    </label>
+
+    <label>
+      Fondo:
+      <div class="input-with-button">
+        <input type="text" id="bg-path" readonly placeholder="Selecciona imagen..." />
+        <button type="button" id="select-bg">Elegir</button>
+      </div>
+    </label>
+
+    <label>
+      Logo:
+      <div class="input-with-button">
+        <input type="text" id="logo-path" readonly placeholder="Selecciona imagen..." />
+        <button type="button" id="select-logo">Elegir</button>
+      </div>
+    </label>
+
+    <button type="submit">Guardar cambios</button>
+    <div id="message" class="message"></div>
+  </form>
+
+  <script src="../scripts/modalEdit.js"></script>
 </body>
 </html>

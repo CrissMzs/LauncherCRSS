@@ -13,8 +13,7 @@ const { putFirst } = require("./services/reOrder");
 // variables para la creacion de la pagina principal, modal (crear nuevo), modal editar
 let addNewWin = null;
 let mainWindow;
-let editWindow = null
-
+let editWindow = null;
 
 // necesario para dev
 try {
@@ -35,7 +34,7 @@ const createWindow = () => {
       contextIsolation: false,
     },
   });
-   // favor no descomentar
+  // favor no descomentar
   //mainWindow.webContents.openDevTools();
 
   // esta bien no lo descomento
@@ -145,8 +144,8 @@ ipcMain.handle("select-launcher-path", async () => {
 ipcMain.on("open-add-new-window", () => {
   createAddNewWindow();
 });
-ipcMain.on("open-edit-window", () => {
-  createEditWindow();
+ipcMain.on("open-edit-window", (event, { game, index }) => {
+  createEditWindow(game, index);
 });
 // IPC mas complejos
 
@@ -163,10 +162,7 @@ ipcMain.on("add-new-game-entry", async (event, gameData) => {
 
     const iconOutput = path.join(assetsPath, `${id}_ico.png`);
     console.log("[MAIN] Procesando imágenes:", { iconPath });
-    await sharp(iconPath)
-      .resize({ width: 900 }) 
-      .png()
-      .toFile(iconOutput);
+    await sharp(iconPath).resize({ width: 900 }).png().toFile(iconOutput);
 
     const bgOutput = path.join(assetsPath, `${id}_background.png`);
     console.log("[MAIN] Procesando imágenes:", { bgPath });
@@ -182,7 +178,6 @@ ipcMain.on("add-new-game-entry", async (event, gameData) => {
 
     const rawLibrary = fs.readFileSync(libraryPath, "utf8");
     const library = JSON.parse(rawLibrary);
-
 
     const newEntry = { id, title, type, url };
 
@@ -235,6 +230,60 @@ ipcMain.on("reorder-library-entry", (event, gameId) => {
   putFirst(gameId);
 });
 
+// IPC PARA UPDATE
+
+ipcMain.on("update-game-entry", async (event, { index, updatedGame }) => {
+  try {
+    const libraryPath = path.join(getBasePath(), "library.json");
+    const assetsPath = path.join(getBasePath(), "assets");
+
+    if (!fs.existsSync(libraryPath)) {
+      throw new Error("library.json no encontrado");
+    }
+
+    const rawLibrary = fs.readFileSync(libraryPath, "utf8");
+    const library = JSON.parse(rawLibrary);
+
+    if (index < 0 || index >= library.length) {
+      throw new Error("Índice fuera de rango");
+    }
+
+    // 📌 Recuperamos el ID original para construir rutas de imagen
+    const originalId = library[index].id;
+    const { id, title, type, url, iconPath, bgPath, logoPath } = updatedGame;
+
+    // ⚡ Procesar nuevas imágenes solo si el usuario seleccionó alguna
+    if (iconPath) {
+      const iconOutput = path.join(assetsPath, `${id}_ico.png`);
+      console.log("[MAIN] Actualizando ícono:", iconPath);
+      await sharp(iconPath).resize({ width: 900 }).png().toFile(iconOutput);
+    }
+
+    if (bgPath) {
+      const bgOutput = path.join(assetsPath, `${id}_background.png`);
+      console.log("[MAIN] Actualizando fondo:", bgPath);
+      await sharp(bgPath).resize({ width: 900 }).png().toFile(bgOutput);
+    }
+
+    if (logoPath) {
+      const logoOutput = path.join(assetsPath, `${id}_logo.png`);
+      console.log("[MAIN] Actualizando logo:", logoPath);
+      await sharp(logoPath).resize({ width: 900 }).png().toFile(logoOutput);
+    }
+
+    // 📌 Reemplazamos los datos en la librería (sin perder imágenes)
+    library[index] = { id, title, type, url };
+
+    fs.writeFileSync(libraryPath, JSON.stringify(library, null, 2), "utf8");
+
+    console.log(`[MAIN] ✅ Juego ${id} actualizado correctamente`);
+    event.sender.send("update-game-success");
+  } catch (error) {
+    console.error("[MAIN] ❌ Error al actualizar juego:", error);
+    event.sender.send("update-game-error", error.message);
+  }
+});
+
 // aqui nos aseguramos que exista la carpeta assets en APPDATA/ROAMING/LAUNCHERCRSS/
 // si necesitas otra carpeta, creala con otro metodo con la misma logica
 // este metodo jamas se usaria de no ser porque esta en el mismo donde iniciamos la app.
@@ -258,7 +307,7 @@ function ensureAssetsFolder() {
 // en caso de querer otro modal obviamente agregar una variable nueva y recrear la logica
 
 function createAddNewWindow() {
-    // si existe la ventana y no esta destruida, enfocarse en ella
+  // si existe la ventana y no esta destruida, enfocarse en ella
   if (addNewWin && !addNewWin.isDestroyed()) {
     addNewWin.focus();
     return;
@@ -293,38 +342,37 @@ function createAddNewWindow() {
   });
 }
 
-function createEditWindow() {
-    // si existe la ventana y no esta destruida, enfocarse en ella
-  if (editWindow && !editWindow.isDestroyed()) {
-    editWindow.focus();
+let editWin = null;
+
+function createEditWindow(game, index) {
+  if (editWin) {
+    editWin.focus();
     return;
-    // termina. Esto evita que se creen varias ventanas, porque ya existe una. (Una a la vez)
   }
 
-  editWindow = new BrowserWindow({
-    width: 720, // ancho
-    height: 520, // alto
-    resizable: false, // se puede cambiar el ancho y alto?
-    minimizable: false, // se puede minimizar?
-    maximizable: false, // se puede maximizar?
-    title: "Editar Juego", // titulo de la ventana
-    parent: BrowserWindow.getAllWindows()[0] || null,
-    modal: true, // es un modal?
+  editWin = new BrowserWindow({
+    width: 500,
+    height: 700,
+    resizable: false,
+    minimizable: false,
+    maximizable: false,
+    modal: true,
     autoHideMenuBar: true, // oculta la cinta de opciones (File, Edit, Select, Window)
-    frame: true, // Tiene botones del sistema? (Cerrar, maximizar, etc) Como ya quite dos alla arriba, dejo el de cerrar
+    parent: BrowserWindow.getFocusedWindow(),
     webPreferences: {
-      nodeIntegration: true, // Esto le da permisos de edicion externa al HTML
-      contextIsolation: false, // Esto dejarlo asi
-      sandbox: false, // Un modo de prueba, dejarlo en false
+      nodeIntegration: true,
+      contextIsolation: false,
     },
   });
 
-  // con esto se carga, el path.join ya es una regla de node.js
-  // se abre tan facil como con __dirname, carpeta, archivo.extension
-  editWindow.loadFile(path.join(__dirname, "html", "edit.html"));
+  editWin.loadFile(path.join(__dirname, "html", "edit.html"));
 
-  // al cerrar vaciar la variable de nuevo
-  editWindow.on("closed", () => {
-    editWindow = null;
+  // 👇 MUY IMPORTANTE: Esperamos a que la ventana cargue antes de enviar datos
+  ipcMain.once("edit-game-window-ready", () => {
+    editWin.webContents.send("edit-game-data", { game, index });
+  });
+
+  editWin.on("closed", () => {
+    editWin = null;
   });
 }

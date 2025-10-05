@@ -186,18 +186,17 @@ window.addEventListener("keydown", (e) => {
       }
       break;
 
-    case "e":
-      {
-        const library = getLibrary();
-        const game = library[currentIndex];
-        if (!game) return;
-        if (game.id === "add-new") {
-          return;
-        }
-        const { ipcRenderer } = require("electron");
-        ipcRenderer.send("open-edit-window");
-      }
-      break;
+case "e":
+  {
+    const library = getLibrary();
+    const game = library[currentIndex];
+    if (!game) return;
+    if (game.id === "add-new") return;
+
+    const { ipcRenderer } = require("electron");
+    ipcRenderer.send("open-edit-window", { game, index: currentIndex });
+  }
+  break;
 
     case "enter":
     case " ":
