@@ -1,0 +1,315 @@
+.gallery {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 2rem 20px 2rem 60px; /* 👈 margen izquierdo extra */  margin: 60px 0 0 0;
+  scrollbar-width: none;
+
+}
+
+.gallery::-webkit-scrollbar {
+  display: none;
+}
+
+.entry-wrapper {
+  flex: 0 0 auto;
+  width: 150px; /* 👈 fijamos ancho base aquí */
+  margin-right: 1rem; /* 👈 espaciado constante */
+  scroll-snap-align: start; /* 👈 antes estaba 'center', esto es la clave */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, width 0s;
+}
+
+/* ✨ Estado base: CUADRADO */
+.entry {
+    margin-left: 120px;
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border-radius: 12px;
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    height 0.3s ease,
+    width 0.3s ease,
+    border-radius 0.3s ease;
+}
+
+/* fondo ico */
+.entry-bg {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+/* overlay con blur + oscuro + logo */
+.entry-overlay {
+  position: absolute;
+  inset: 0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 60%;
+  backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.5);
+  transition: opacity 0.3s ease;
+}
+
+/* Título que aparece solo en hover */
+.game-title {
+  opacity: 0;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+  transition: opacity 0.3s ease;
+}
+
+.entry-wrapper:hover .game-title {
+  opacity: 1;
+}
+
+/* Tarjeta especial (+) */
+.special-entry {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px dashed rgba(255, 255, 255, 0.4);
+  font-size: 4rem;
+  color: white;
+}
+
+/* ✨ ACTIVO o HOVER → se convierte en RECTÁNGULO VERTICAL */
+.entry-wrapper:hover .entry,
+.entry-wrapper.active .entry {
+    min-width: 180px;
+  height: 280px; /* 👈 más alto que ancho */
+  border-radius: 10px; /* bordes más suaves cuando se estira */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  z-index: 5;
+}
+
+.entry-wrapper:hover,
+.entry-wrapper.active {
+  width: 180px; /* 👈 coincide con el .entry expandido */
+}
+
+/* activa o hover → ocultamos overlay */
+.entry-wrapper.active .entry-overlay,
+.entry-wrapper:hover .entry-overlay {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* activa o hover → quitamos blur del fondo */
+.entry-wrapper.active .entry-bg,
+.entry-wrapper:hover .entry-bg {
+  filter: none;
+  transform: scale(1.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Desactivamos título en activo/hover */
+.entry-wrapper:hover .game-title,
+.entry-wrapper.active .game-title {
+  opacity: 0;
+}
+
+
+.game-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(5px) brightness(0.6); /* efecto tipo PS5 */
+  transform: scale(1.1);
+  transition: background-image 0.3s ease, opacity 0.3s ease;
+  z-index: 0;
+}
+
+.gradient-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0; /* justo encima del fondo, debajo del contenido */
+  background: 
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 15%),
+    linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 50%);
+}
+
+.navbar,
+.content,
+.gallery {
+  position: relative;
+  z-index: 1;
+}
+
+/* 🌌 Navbar estilo PS5 */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+  z-index: 1000;
+  color: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  letter-spacing: 0.5px;
+}
+
+/* Alinear el mensaje de bienvenida */
+.navbar-left {
+  font-weight: 500;
+}
+
+/* Reloj a la derecha */
+.navbar-right {
+  font-weight: 400;
+}
+
+/* Para que el resto del contenido no quede oculto */
+body {
+      margin: 0;
+  background-color: #141414;
+  margin: 0;
+}
+
+.navbar{
+    min-height: 4vh;
+    font-size: 30px;
+    color: #fff;
+}
+.content{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.gameContent {
+  display: flex;
+  justify-content: left;
+  align-items: end;
+  padding: 2rem;
+  min-height: 200px;
+}
+
+.game-logo-container {
+  display: flex;
+  justify-content: left;
+  align-items: end;
+}
+
+.game-logo {
+  max-height: 300px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.5));
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.game-logo:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+/* 🌌 Fondo oscuro */
+#loading-spinner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #0e0e10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.5s ease;
+}
+
+/* Spinner estilo PS5 */
+.ps-spinner {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.ps-spinner div {
+  transform-origin: 40px 40px;
+  animation: ps-spinner 1.2s linear infinite;
+}
+
+.ps-spinner div:after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 3px;
+  left: 37px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 8px #ffffff;
+}
+
+.ps-spinner div:nth-child(1) {
+  transform: rotate(0deg);
+  animation-delay: -1.1s;
+}
+
+.ps-spinner div:nth-child(2) {
+  transform: rotate(60deg);
+  animation-delay: -1s;
+}
+
+.ps-spinner div:nth-child(3) {
+  transform: rotate(120deg);
+  animation-delay: -0.9s;
+}
+
+.ps-spinner div:nth-child(4) {
+  transform: rotate(180deg);
+  animation-delay: -0.8s;
+}
+
+.ps-spinner div:nth-child(5) {
+  transform: rotate(240deg);
+  animation-delay: -0.7s;
+}
+
+.ps-spinner div:nth-child(6) {
+  transform: rotate(300deg);
+  animation-delay: -0.6s;
+}
+
+@keyframes ps-spinner {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+#loading-spinner.hidden {
+  opacity: 0;
+  pointer-events: none;
+}

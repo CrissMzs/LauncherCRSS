@@ -1,0 +1,41 @@
+@'
+# =========================
+# 📦 Node / NPM
+# =========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# =========================
+# ⚡ Electron (artefactos)
+# =========================
+dist/
+out/
+*.log
+
+# =========================
+# 🖼️ Assets generados en runtime (si generas en proyecto)
+assets/*
+!assets/.gitkeep
+
+# =========================
+# 📝 Config local / runtime
+# =========================
+config.json
+library.json
+.env
+local.env
+
+# =========================
+# 🖥️ SO / IDE
+# =========================
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+'@ | Out-File -Encoding UTF8 .gitignore
+
+# Mantener la carpeta assets vacía si la usas dentro del repo
+New-Item -ItemType File -Path assets\.gitkeep -Force | Out-Null
