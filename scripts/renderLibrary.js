@@ -173,7 +173,7 @@ window.addEventListener("keydown", (e) => {
       if (currentIndex < wrappers.length - 1) {
         currentIndex++;
         updateActiveItem();
-        scrollToIndex(currentIndex); 
+        scrollToIndex(currentIndex);
         updateBackgroundForIndex(currentIndex);
       }
       break;
@@ -185,6 +185,20 @@ window.addEventListener("keydown", (e) => {
         updateBackgroundForIndex(currentIndex);
       }
       break;
+
+    case "e":
+      {
+        const library = getLibrary();
+        const game = library[currentIndex];
+        if (!game) return;
+        if (game.id === "add-new") {
+          return;
+        }
+        const { ipcRenderer } = require("electron");
+        ipcRenderer.send("open-edit-window");
+      }
+      break;
+
     case "enter":
     case " ":
       e.preventDefault();
@@ -211,5 +225,5 @@ window.addEventListener("keydown", (e) => {
 
 ipcRenderer.on("refresh-library", () => {
   console.log("[Renderer] Refrescando librería...");
-  location.reload(); 
+  location.reload();
 });

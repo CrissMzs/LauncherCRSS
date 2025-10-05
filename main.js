@@ -10,9 +10,11 @@ const { putFirst } = require("./services/reOrder");
 
 // main
 
-// variables para la creacion de la pagina principal, modal (crear nuevo)
+// variables para la creacion de la pagina principal, modal (crear nuevo), modal editar
 let addNewWin = null;
 let mainWindow;
+let editWindow = null
+
 
 // necesario para dev
 try {
@@ -143,7 +145,9 @@ ipcMain.handle("select-launcher-path", async () => {
 ipcMain.on("open-add-new-window", () => {
   createAddNewWindow();
 });
-
+ipcMain.on("open-edit-window", () => {
+  createEditWindow();
+});
 // IPC mas complejos
 
 // agregar juego al json dentro de APPDATA/ROAMING/LAUNCHERCRSS/library.json
@@ -286,5 +290,41 @@ function createAddNewWindow() {
   // al cerrar vaciar la variable de nuevo
   addNewWin.on("closed", () => {
     addNewWin = null;
+  });
+}
+
+function createEditWindow() {
+    // si existe la ventana y no esta destruida, enfocarse en ella
+  if (editWindow && !editWindow.isDestroyed()) {
+    editWindow.focus();
+    return;
+    // termina. Esto evita que se creen varias ventanas, porque ya existe una. (Una a la vez)
+  }
+
+  editWindow = new BrowserWindow({
+    width: 720, // ancho
+    height: 520, // alto
+    resizable: false, // se puede cambiar el ancho y alto?
+    minimizable: false, // se puede minimizar?
+    maximizable: false, // se puede maximizar?
+    title: "Editar Juego", // titulo de la ventana
+    parent: BrowserWindow.getAllWindows()[0] || null,
+    modal: true, // es un modal?
+    autoHideMenuBar: true, // oculta la cinta de opciones (File, Edit, Select, Window)
+    frame: true, // Tiene botones del sistema? (Cerrar, maximizar, etc) Como ya quite dos alla arriba, dejo el de cerrar
+    webPreferences: {
+      nodeIntegration: true, // Esto le da permisos de edicion externa al HTML
+      contextIsolation: false, // Esto dejarlo asi
+      sandbox: false, // Un modo de prueba, dejarlo en false
+    },
+  });
+
+  // con esto se carga, el path.join ya es una regla de node.js
+  // se abre tan facil como con __dirname, carpeta, archivo.extension
+  editWindow.loadFile(path.join(__dirname, "html", "edit.html"));
+
+  // al cerrar vaciar la variable de nuevo
+  editWindow.on("closed", () => {
+    editWindow = null;
   });
 }
