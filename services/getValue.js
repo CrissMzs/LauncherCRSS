@@ -3,7 +3,6 @@ const path = require('path');
 const os = require('os');
 const { getBasePath } = require('./getPath');
 
-// 📌 Carpeta base donde guardarás tus configs (ejemplo: AppData/LauncherCRSS)
 const baseConfigDir = getBasePath();
 /**
  * Obtiene el valor de una key dentro de un archivo JSON.

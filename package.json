@@ -5,6 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
+    "dev": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "CRSS",
@@ -13,6 +14,7 @@
     "electron": "^38.2.1"
   },
   "dependencies": {
+    "electron-reload": "^2.0.0-alpha.1",
     "sharp": "^0.34.4"
   }
 }

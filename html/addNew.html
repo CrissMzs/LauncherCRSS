@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Añadir Juego</title>
     <style>
+        /* esta practica esta mal, hay que mover el css del modal a un archivo aparte
+        y hacer referencia en el HTML a ese stylesheet */
         body {
             font-family: sans-serif;
             margin: 20px;
@@ -126,6 +128,12 @@
     </form>
 
     <script>
+        /* de igual forma deberia tener su propio js en scripts */
+
+
+        /* TODO ESTO HACE QUE EL ENVIO DEL FORMULARIO SIRVA, EN CASO DE HACER UN SEGUNDO FORMULARIO
+        IMITAR LOGICA */
+
         const { ipcRenderer } = require('electron');
 
         const form = document.getElementById('add-form');
@@ -141,7 +149,6 @@
         const bgPathInput = document.getElementById('bg-path');
         const logoPathInput = document.getElementById('logo-path');
 
-        // 📌 Funciones nombradas para poder removerlas
         function handleBrowse() {
             ipcRenderer.invoke('select-launcher-path').then((filePath) => {
                 if (filePath) {
@@ -163,18 +170,16 @@
         }
 
         function handleSelectLogo() {
-  ipcRenderer.invoke('select-image-file').then(filePath => {
-    if (filePath) logoPathInput.value = filePath;
-  });
-}
+            ipcRenderer.invoke('select-image-file').then(filePath => {
+                if (filePath) logoPathInput.value = filePath;
+            });
+        }
 
-        // 📌 Añadimos listeners solo una vez
         browseBtn.addEventListener('click', handleBrowse);
         selectIconBtn.addEventListener('click', handleSelectIcon);
         selectBgBtn.addEventListener('click', handleSelectBg);
         selectLogoBtn.addEventListener('click', handleSelectLogo);
 
-        // 📌 Al enviar el formulario
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
@@ -184,14 +189,14 @@
             const url = document.getElementById('game-url').value.trim();
             const iconPath = iconPathInput.value.trim();
             const bgPath = bgPathInput.value.trim();
-const logoPath = logoPathInput.value.trim();
+            const logoPath = logoPathInput.value.trim();
 
             if (!id || !title || !iconPath || !bgPath || !logoPath) {
-  showMessage('Faltan campos obligatorios', 'error');
-  return;
-}
+                showMessage('Faltan campos obligatorios', 'error');
+                return;
+            }
 
-ipcRenderer.send('add-new-game-entry', { id, title, type, url, iconPath, bgPath, logoPath });
+            ipcRenderer.send('add-new-game-entry', { id, title, type, url, iconPath, bgPath, logoPath });
         });
 
         ipcRenderer.on('add-new-game-success', () => {
@@ -212,7 +217,6 @@ ipcRenderer.send('add-new-game-entry', { id, title, type, url, iconPath, bgPath,
             messageDiv.className = type;
         }
 
-        // 👇 Función para limpiar todos los listeners al cerrar la ventana
         function cleanupListeners() {
             browseBtn.removeEventListener('click', handleBrowse);
             selectIconBtn.removeEventListener('click', handleSelectIcon);

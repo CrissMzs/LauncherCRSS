@@ -1,4 +1,3 @@
-// services/reOrder.js
 const fs = require('fs');
 const path = require('path');
 const { getBasePath } = require('./getPath');
@@ -8,7 +7,7 @@ const { getBasePath } = require('./getPath');
  * Mantiene el elemento "add-new" al final.
  * @param {string} gameId - ID del juego que se desea mover
  */
-function reorderLibrary(gameId) {
+function putFirst(gameId) {
   try {
     const libraryPath = path.join(getBasePath(), 'library.json');
 
@@ -54,4 +53,4 @@ function reorderLibrary(gameId) {
   }
 }
 
-module.exports = { reorderLibrary };
+module.exports = { putFirst };

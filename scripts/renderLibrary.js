@@ -4,82 +4,79 @@ const path = require("path");
 const fs = require("fs");
 const { pathToFileURL } = require("url");
 
+// ESTE ES EL MAS GRANDE DE MOMENTO. NO ROMPERLO.
+// SOLO DIOS Y YO SABIAMOS COMO SE HIZO ESTO EN SU MOMENTO
+// AHORA SOLO LO SABE DIOS.
+
+// esto tiene un listener enorme que renderiza parte por parte cada cosa del HTML.
+// lo mete en un bucle y va renderizando todas las entradas que tengamos.
+// si tienes mas dudas de como funciona una parte especifica preguntame o preguntale a GPT.
+// la logica no es complicada pero como es js, es algo chistosa.
+
 window.addEventListener("DOMContentLoaded", () => {
   const gallery = document.getElementById("game-gallery");
   const library = getLibrary();
-// 🧱 Espaciador inicial (para que la primera tarjeta no se corte)
-const leftSpacer = document.createElement('div');
-leftSpacer.style.flex = '0 0 60px'; // 👈 el ancho que compensa el scale y sombra
-gallery.appendChild(leftSpacer);
+  const leftSpacer = document.createElement("div");
+  leftSpacer.style.flex = "0 0 60px";
+  gallery.appendChild(leftSpacer);
 
-library.forEach((game) => {
-  // 📌 Contenedor de la tarjeta y el título
-  const entryWrapper = document.createElement("div");
-  entryWrapper.classList.add("entry-wrapper");
+  library.forEach((game) => {
+    const entryWrapper = document.createElement("div");
+    entryWrapper.classList.add("entry-wrapper");
 
-  // 🧱 Tarjeta visual
-  const entry = document.createElement("div");
-  entry.classList.add("entry");
+    const entry = document.createElement("div");
+    entry.classList.add("entry");
 
-  if (game.type === "special") {
-    // ✚ Tarjeta especial de "Añadir Juego"
-    entry.classList.add("special-entry");
-    entry.textContent = game.icon || "+";
-  } else {
-    // 🖼️ Construimos rutas a imágenes: ico y logo
-    const icoFileName = `${game.id}_ico.png`;
-    const logoFileName = `${game.id}_logo.png`;
+    if (game.type === "special") {
+      entry.classList.add("special-entry");
+      entry.textContent = game.icon || "+";
+    } else {
+      const icoFileName = `${game.id}_ico.png`;
+      const logoFileName = `${game.id}_logo.png`;
 
-    const icoPath = path.join(getBasePath(), "assets", icoFileName);
-    const logoPath = path.join(getBasePath(), "assets", logoFileName);
+      const icoPath = path.join(getBasePath(), "assets", icoFileName);
+      const logoPath = path.join(getBasePath(), "assets", logoFileName);
 
-    let icoURL = fs.existsSync(icoPath)
-      ? pathToFileURL(icoPath).href
-      : "https://via.placeholder.com/300x400?text=No+Image";
+      let icoURL = fs.existsSync(icoPath)
+        ? pathToFileURL(icoPath).href
+        : "https://via.placeholder.com/300x400?text=No+Image";
 
-    let logoURL = fs.existsSync(logoPath)
-      ? pathToFileURL(logoPath).href
-      : "";
+      let logoURL = fs.existsSync(logoPath) ? pathToFileURL(logoPath).href : "";
 
-    // 🔹 Fondo base (ico)
-    const bgDiv = document.createElement("div");
-    bgDiv.classList.add("entry-bg");
-    bgDiv.style.backgroundImage = `url('${icoURL}')`;
+      const bgDiv = document.createElement("div");
+      bgDiv.classList.add("entry-bg");
+      bgDiv.style.backgroundImage = `url('${icoURL}')`;
 
-    // 🔹 Overlay (blur + oscuro + logo centrado)
-    const overlayDiv = document.createElement("div");
-    overlayDiv.classList.add("entry-overlay");
-    if (logoURL) {
-      overlayDiv.style.backgroundImage = `url('${logoURL}')`;
+      const overlayDiv = document.createElement("div");
+      overlayDiv.classList.add("entry-overlay");
+      if (logoURL) {
+        overlayDiv.style.backgroundImage = `url('${logoURL}')`;
+      }
+
+      entry.appendChild(bgDiv);
+      entry.appendChild(overlayDiv);
+
+      if (game.url && game.url !== "null") {
+        entry.addEventListener("click", () => openGame(game.url, game.id));
+      }
     }
 
-    entry.appendChild(bgDiv);
-    entry.appendChild(overlayDiv);
+    const title = document.createElement("p");
+    title.classList.add("game-title");
+    title.textContent = game.title || "";
 
-    // 🖱 Click → abrir juego
-    if (game.url && game.url !== "null") {
-      entry.addEventListener("click", () => openGame(game.url, game.id));
-    }
+    entryWrapper.appendChild(entry);
+    entryWrapper.appendChild(title);
+    gallery.appendChild(entryWrapper);
+  });
+
+  // aqui hacemos el el "select sea el primero"
+  if (library.length > 0) {
+    currentIndex = 0;
+    updateActiveItem();
+    updateBackgroundForIndex(currentIndex);
   }
 
-  // 📋 Título que aparece solo en hover
-  const title = document.createElement("p");
-  title.classList.add("game-title");
-  title.textContent = game.title || "";
-
-  entryWrapper.appendChild(entry);
-  entryWrapper.appendChild(title);
-  gallery.appendChild(entryWrapper);
-});
-
-
-  if (library.length > 0) {
-  currentIndex = 0;
-  updateActiveItem();
-  updateBackgroundForIndex(currentIndex);
-}
-
-  // 🧱 Espaciador dinámico al final
   const wrapperWidth =
     document.querySelector(".entry-wrapper")?.offsetWidth || 240;
   const galleryWidth = gallery.clientWidth;
@@ -90,12 +87,12 @@ library.forEach((game) => {
   spacer.style.width = `${spacerWidth}px`;
   gallery.appendChild(spacer);
 
-  const spinner = document.getElementById('loading-spinner');
-if (spinner) {
-  setTimeout(() => {
-    spinner.classList.add('hidden');
-  }, 300);
-}
+  const spinner = document.getElementById("loading-spinner");
+  if (spinner) {
+    setTimeout(() => {
+      spinner.classList.add("hidden");
+    }, 300);
+  }
 });
 
 const gallery = document.getElementById("game-gallery");
@@ -112,7 +109,7 @@ function updateActiveItem() {
   if (currentIndex >= 0 && currentIndex < wrappers.length) {
     wrappers[currentIndex].classList.add("active");
 
-    // 📡 Notificar al render de gameContent
+    // con esto notifico al renderGameContent.js el cambio del juego seleccionado
     const library = getLibrary();
     const activeGame = library[currentIndex];
 
@@ -127,17 +124,16 @@ function updateBackgroundForIndex(index) {
 
   // obtener id del juego activo
   const activeWrapper = wrappers[index];
-  const gameTitle = activeWrapper.querySelector('.game-title')?.textContent;
+  const gameTitle = activeWrapper.querySelector(".game-title")?.textContent;
 
-  // ⚡ mejor: guarda los datos de la librería para obtener el id directamente
   const library = getLibrary();
   const game = library[index];
   if (!game) return;
 
   const bgFileName = `${game.id}_background.png`;
-  const bgPath = path.join(getBasePath(), 'assets', bgFileName);
+  const bgPath = path.join(getBasePath(), "assets", bgFileName);
 
-  const bgContainer = document.querySelector('.game-background');
+  const bgContainer = document.querySelector(".game-background");
   if (fs.existsSync(bgPath)) {
     const bgUrl = pathToFileURL(bgPath).href;
     bgContainer.style.backgroundImage = `url('${bgUrl}')`;
@@ -151,27 +147,22 @@ function scrollToIndex(index) {
 
   const target = wrappers[index];
 
-  // 🧠 Calculamos el desplazamiento manualmente,
-  // asumiendo que el elemento activo tendrá 180px de ancho
   const baseWidth = 150;
   const activeWidth = 180;
   const margin = 40;
 
   let left = target.offsetLeft - margin;
 
-  // Si el wrapper activo es distinto del ancho base, compensamos el "salto"
-  if (target.classList.contains('active')) {
+  if (target.classList.contains("active")) {
     const diff = activeWidth - baseWidth;
-    left -= diff / 2; 
+    left -= diff / 2;
   }
 
   gallery.scrollTo({
     left,
-    behavior: "smooth"
+    behavior: "smooth",
   });
 }
-
-
 
 window.addEventListener("keydown", (e) => {
   const wrappers = getWrappers();
@@ -182,7 +173,7 @@ window.addEventListener("keydown", (e) => {
       if (currentIndex < wrappers.length - 1) {
         currentIndex++;
         updateActiveItem();
-        scrollToIndex(currentIndex); // 👈 mueve el carrusel, no la selección
+        scrollToIndex(currentIndex); 
         updateBackgroundForIndex(currentIndex);
       }
       break;
@@ -195,31 +186,30 @@ window.addEventListener("keydown", (e) => {
       }
       break;
     case "enter":
-case " ":
-  e.preventDefault();
-  if (currentIndex >= 0) {
-    const wrappers = getWrappers();
-    const library = getLibrary();
-    const game = library[currentIndex];
-    if (!game) return;
+    case " ":
+      e.preventDefault();
+      if (currentIndex >= 0) {
+        const wrappers = getWrappers();
+        const library = getLibrary();
+        const game = library[currentIndex];
+        if (!game) return;
 
-    if (game.id === "add-new") {
-      const { ipcRenderer } = require('electron');
-      
-      ipcRenderer.send('open-add-new-window');   // ← abre addNew.html
-    } else {
-      const entry = wrappers[currentIndex].querySelector(".entry");
-      if (entry) {
-        entry.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        if (game.id === "add-new") {
+          const { ipcRenderer } = require("electron");
+
+          ipcRenderer.send("open-add-new-window");
+        } else {
+          const entry = wrappers[currentIndex].querySelector(".entry");
+          if (entry) {
+            entry.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+          }
+        }
       }
-    }
-  }
-  break;
-
+      break;
   }
 });
 
-ipcRenderer.on('refresh-library', () => {
-  console.log('[Renderer] Refrescando librería...');
-  location.reload();  // 👈 Recarga todo el renderer para que se vuelva a construir la galería
+ipcRenderer.on("refresh-library", () => {
+  console.log("[Renderer] Refrescando librería...");
+  location.reload(); 
 });

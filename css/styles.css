@@ -2,7 +2,8 @@
   display: flex;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  padding: 2rem 20px 2rem 60px; /* 👈 margen izquierdo extra */  margin: 60px 0 0 0;
+  padding: 2rem 20px 2rem 60px; 
+  margin: 60px 0 0 0;
   scrollbar-width: none;
 
 }
@@ -13,16 +14,15 @@
 
 .entry-wrapper {
   flex: 0 0 auto;
-  width: 150px; /* 👈 fijamos ancho base aquí */
-  margin-right: 1rem; /* 👈 espaciado constante */
-  scroll-snap-align: start; /* 👈 antes estaba 'center', esto es la clave */
+  width: 150px; 
+  margin-right: 1rem; 
+  scroll-snap-align: start; 
   display: flex;
   flex-direction: column;
   align-items: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease, width 0s;
 }
 
-/* ✨ Estado base: CUADRADO */
 .entry {
     margin-left: 120px;
   position: relative;
@@ -39,7 +39,6 @@
     border-radius 0.3s ease;
 }
 
-/* fondo ico */
 .entry-bg {
   width: 100%;
   height: 100%;
@@ -48,7 +47,6 @@
   transition: filter 0.3s ease, transform 0.3s ease;
 }
 
-/* overlay con blur + oscuro + logo */
 .entry-overlay {
   position: absolute;
   inset: 0;
@@ -60,7 +58,6 @@
   transition: opacity 0.3s ease;
 }
 
-/* Título que aparece solo en hover */
 .game-title {
   opacity: 0;
   margin-top: 0.5rem;
@@ -75,7 +72,6 @@
   opacity: 1;
 }
 
-/* Tarjeta especial (+) */
 .special-entry {
   display: flex;
   align-items: center;
@@ -86,29 +82,26 @@
   color: white;
 }
 
-/* ✨ ACTIVO o HOVER → se convierte en RECTÁNGULO VERTICAL */
 .entry-wrapper:hover .entry,
 .entry-wrapper.active .entry {
     min-width: 180px;
-  height: 280px; /* 👈 más alto que ancho */
-  border-radius: 10px; /* bordes más suaves cuando se estira */
+  height: 280px;
+  border-radius: 10px; 
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   z-index: 5;
 }
 
 .entry-wrapper:hover,
 .entry-wrapper.active {
-  width: 180px; /* 👈 coincide con el .entry expandido */
+  width: 180px; 
 }
 
-/* activa o hover → ocultamos overlay */
 .entry-wrapper.active .entry-overlay,
 .entry-wrapper:hover .entry-overlay {
   opacity: 0;
   pointer-events: none;
 }
 
-/* activa o hover → quitamos blur del fondo */
 .entry-wrapper.active .entry-bg,
 .entry-wrapper:hover .entry-bg {
   filter: none;
@@ -116,7 +109,6 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-/* Desactivamos título en activo/hover */
 .entry-wrapper:hover .game-title,
 .entry-wrapper.active .game-title {
   opacity: 0;
@@ -132,7 +124,7 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  filter: blur(5px) brightness(0.6); /* efecto tipo PS5 */
+  filter: blur(5px) brightness(0.6); 
   transform: scale(1.1);
   transition: background-image 0.3s ease, opacity 0.3s ease;
   z-index: 0;
@@ -145,7 +137,7 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 0; /* justo encima del fondo, debajo del contenido */
+  z-index: 0; 
   background: 
     linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 15%),
     linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 50%);
@@ -158,7 +150,6 @@
   z-index: 1;
 }
 
-/* 🌌 Navbar estilo PS5 */
 .navbar {
   position: fixed;
   top: 0;
@@ -175,17 +166,14 @@
   letter-spacing: 0.5px;
 }
 
-/* Alinear el mensaje de bienvenida */
 .navbar-left {
   font-weight: 500;
 }
 
-/* Reloj a la derecha */
 .navbar-right {
   font-weight: 400;
 }
 
-/* Para que el resto del contenido no quede oculto */
 body {
       margin: 0;
   background-color: #141414;
@@ -230,7 +218,6 @@ body {
   opacity: 0.9;
 }
 
-/* 🌌 Fondo oscuro */
 #loading-spinner {
   position: fixed;
   top: 0;
@@ -245,7 +232,6 @@ body {
   transition: opacity 0.5s ease;
 }
 
-/* Spinner estilo PS5 */
 .ps-spinner {
   position: relative;
   width: 80px;
