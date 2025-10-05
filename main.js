@@ -33,8 +33,8 @@ const createWindow = () => {
       contextIsolation: false,
     },
   });
-
-  mainWindow.webContents.openDevTools();
+   // favor no descomentar
+  //mainWindow.webContents.openDevTools();
 
   mainWindow.loadFile("html/main.html");
 };
