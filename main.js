@@ -33,7 +33,7 @@ const createWindow = () => {
       contextIsolation: false,
     },
   });
-
+   // favor no descomentar
   //mainWindow.webContents.openDevTools();
 
   mainWindow.loadFile("html/main.html");
