@@ -3,6 +3,9 @@
 A customizable game launcher inspired by the PlayStation 5 interface, built with Electron, HTML, CSS, and JavaScript.
 ### It lets you organize, personalize, and launch your favorite games in an elegant, fast, and visually rich way ✨
 
+![LauncherCRSS Screenshot](./assets/screenshot.png)
+
+
 * 🚀 Features
 * 🖼️ PS5-inspired UI with smooth animations and a horizontal game gallery.
 * 🌐 Multi-language (i18n) support, configured via config.json.
