@@ -18,6 +18,12 @@ A customizable game launcher inspired by the PlayStation 5 interface, built with
 * 🌌 Configurable particle effects, controlled from config.json.
 * 🔄 Dynamic UI reload after edits — no restart required.
 
+## 🎮 Controls
+
+- **SPACE** → Launch selected game or Add a New Game
+- **E** → Edit selected game  
+- **A / D** → Navigate through games  
+
 ## 🧰 Requirements
 
 * Node.js
