@@ -1,0 +1,16 @@
+{
+  "welcome": "Welcome",
+  "games": "Games",
+  "addGame": "Add New",
+  "edit_game": "Edit Game",
+  "save": "Save",
+  "cancel": "Cancel",
+  "id": "ID:",
+  "title": "Title",
+  "genere": "Genere",
+  "shortcut": "Shortcut",
+  "cover": "Cover",
+  "bg": "Background",
+  "logo": "Icon",
+  "select": "Select"
+}

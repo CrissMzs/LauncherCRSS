@@ -320,3 +320,17 @@ body {
   opacity: 0;
   pointer-events: none;
 }
+
+.lang-select {
+  background: transparent;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.lang-select option {
+  color: black; /* para que en el desplegable se vea bien */
+}

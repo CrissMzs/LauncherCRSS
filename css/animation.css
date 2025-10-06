@@ -8,7 +8,7 @@ body {
   z-index: 2;
   position: absolute;
   transform: translateY(-10vh);
-  animation-iteration-count: infinite;
+  animation-iteration-count: infinite; 
   animation-timing-function: linear;
 }
 .circle-container .circle {

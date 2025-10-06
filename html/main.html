@@ -10,130 +10,143 @@
 </head>
 
 <body>
-<div id="loading-spinner">
-  <div class="ps-spinner">
-    <div></div><div></div><div></div><div></div><div></div><div></div>
+  <div id="loading-spinner">
+    <div class="ps-spinner">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
   </div>
-</div>
 
   <div class="game-background"></div>
   <div class="particles">
     <div class="circle-container">
-    <div class="circle"></div>
-  </div>
-  <div class="circle-container">
-    <div class="circle"></div>
-  </div>
-  <div class="circle-container">
-    <div class="circle"></div>
-  </div>
-  <div class="circle-container">
-    <div class="circle"></div>
-  </div>
-  <div class="circle-container">
-    <div class="circle"></div>
-  </div>
-  <div class="circle-container">
-    <div class="circle"></div>
-  </div>
-  <div class="circle-container">
-    <div class="circle"></div>
-  </div>
-  <div class="circle-container">
-    <div class="circle"></div>
-  </div>
-  <div class="circle-container">
-    <div class="circle"></div>
-  </div>
-  <div class="circle-container">
-    <div class="circle"></div>
-  </div>
-  <div class="circle-container">
-    <div class="circle"></div>
-  </div>
-  <div class="circle-container">
-    <div class="circle"></div>
-  </div>
-  <div class="circle-container">
-    <div class="circle"></div>
-  </div>
+      <div class="circle"></div>
+    </div>
     <div class="circle-container">
-    <div class="circle"></div>
-  </div>
+      <div class="circle"></div>
+    </div>
     <div class="circle-container">
-    <div class="circle"></div>
-  </div>
+      <div class="circle"></div>
+    </div>
     <div class="circle-container">
-    <div class="circle"></div>
-  </div>
+      <div class="circle"></div>
+    </div>
     <div class="circle-container">
-    <div class="circle"></div>
-  </div>
+      <div class="circle"></div>
+    </div>
     <div class="circle-container">
-    <div class="circle"></div>
-  </div>
+      <div class="circle"></div>
+    </div>
     <div class="circle-container">
-    <div class="circle"></div>
-  </div>
+      <div class="circle"></div>
+    </div>
     <div class="circle-container">
-    <div class="circle"></div>
-  </div>
+      <div class="circle"></div>
+    </div>
     <div class="circle-container">
-    <div class="circle"></div>
-  </div>
+      <div class="circle"></div>
+    </div>
     <div class="circle-container">
-    <div class="circle"></div>
-  </div>
+      <div class="circle"></div>
+    </div>
     <div class="circle-container">
-    <div class="circle"></div>
-  </div>
+      <div class="circle"></div>
+    </div>
     <div class="circle-container">
-    <div class="circle"></div>
-  </div>
+      <div class="circle"></div>
+    </div>
     <div class="circle-container">
-    <div class="circle"></div>
-  </div>
+      <div class="circle"></div>
+    </div>
     <div class="circle-container">
-    <div class="circle"></div>
-  </div>
+      <div class="circle"></div>
+    </div>
     <div class="circle-container">
-    <div class="circle"></div>
-  </div>
+      <div class="circle"></div>
+    </div>
     <div class="circle-container">
-    <div class="circle"></div>
-  </div>
+      <div class="circle"></div>
+    </div>
     <div class="circle-container">
-    <div class="circle"></div>
-  </div>
+      <div class="circle"></div>
+    </div>
     <div class="circle-container">
-    <div class="circle"></div>
-  </div>
+      <div class="circle"></div>
+    </div>
     <div class="circle-container">
-    <div class="circle"></div>
-  </div>
+      <div class="circle"></div>
+    </div>
     <div class="circle-container">
-    <div class="circle"></div>
-  </div>
+      <div class="circle"></div>
+    </div>
     <div class="circle-container">
-    <div class="circle"></div>
-  </div>
+      <div class="circle"></div>
+    </div>
     <div class="circle-container">
-    <div class="circle"></div>
-  </div>
+      <div class="circle"></div>
+    </div>
+    <div class="circle-container">
+      <div class="circle"></div>
+    </div>
+    <div class="circle-container">
+      <div class="circle"></div>
+    </div>
+    <div class="circle-container">
+      <div class="circle"></div>
+    </div>
+    <div class="circle-container">
+      <div class="circle"></div>
+    </div>
+    <div class="circle-container">
+      <div class="circle"></div>
+    </div>
+    <div class="circle-container">
+      <div class="circle"></div>
+    </div>
+    <div class="circle-container">
+      <div class="circle"></div>
+    </div>
+    <div class="circle-container">
+      <div class="circle"></div>
+    </div>
+    <div class="circle-container">
+      <div class="circle"></div>
+    </div>
+    <div class="circle-container">
+      <div class="circle"></div>
+    </div>
+    <div class="circle-container">
+      <div class="circle"></div>
+    </div>
+    <div class="circle-container">
+      <div class="circle"></div>
+    </div>
   </div>
   <div class="gradient-overlay"></div>
   <canvas id="gradient-canvas"></canvas>
-  
+
 
   <div id="navbar" class="navbar">
-    <div class="navbar-left">
-      <span>Games</span>
-    </div>
-    <div class="navbar-right" style="display: flex; gap: 30px;">
-      <span id="welcome-message">Wellcome</span>
-      <span id="clock"></span>
-    </div>
+  <div class="navbar-left">
+    <span data-i18n="games">Games</span>
   </div>
+
+  <div class="navbar-right" style="display: flex; gap: 30px; align-items: center;">
+    <!-- 🌍 Selector de idioma -->
+    <select id="language-selector" class="lang-select">
+      <option value="es">🇪🇸 ES</option>
+      <option value="en">🇺🇸 EN</option>
+    </select>
+
+    <span id="welcome-message" data-i18n="welcome">Welcome</span>
+    <span id="userman"></span>
+    <span id="clock"></span>
+  </div>
+</div>
 
   <!-- Galería de juegos -->
   <div class="content">
@@ -148,6 +161,7 @@
   <script src="../scripts/renderGameContent.js"></script>
   <script src="../scripts/modalEdit.js"></script>
   <script src="../scripts/animation.js"></script>
+  <script src="../scripts/loadLang.js"></script>
 </body>
 
 </html>

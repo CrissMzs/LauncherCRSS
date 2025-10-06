@@ -15,7 +15,8 @@ function ensureConfigFile() {
 
   if (!fs.existsSync(configPath)) {
     const defaultConfig = {
-      username: "Guest"
+      username: "Guest",
+      lang: "en"
     };
     fs.writeFileSync(configPath, JSON.stringify(defaultConfig, null, 2), 'utf-8');
   }
@@ -34,4 +35,13 @@ function getValue(key) {
   }
 }
 
-module.exports = { getValue };
+function setValue(key, value) {
+  ensureConfigFile();
+  const data = fs.readFileSync(configPath, 'utf-8');
+  const config = JSON.parse(data);
+  config[key] = value;
+  fs.writeFileSync(configPath, JSON.stringify(config, null, 2), 'utf-8');
+}
+
+
+module.exports = { getValue, setValue };

@@ -1,0 +1,16 @@
+{
+  "welcome": "Bienvenido",
+  "games": "Juegos",
+  "addGame": "Añadir nuevo",
+  "edit_game": "Editar juego",
+  "save": "Guardar",
+  "cancel": "Cancelar",
+  "id": "ID:",
+  "title": "Titulo",
+  "genere": "Genero",
+  "shortcut": "Acceso directo",
+  "cover": "Portada",
+  "bg": "Fondo",
+  "logo": "Logo Transparente",
+  "select": "Seleccionar"
+}

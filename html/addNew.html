@@ -4,226 +4,84 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Añadir Juego</title>
-    <style>
-        /* esta practica esta mal, hay que mover el css del modal a un archivo aparte
-        y hacer referencia en el HTML a ese stylesheet */
-        body {
-            font-family: sans-serif;
-            margin: 20px;
-            background: #141414;
-            color: white;
-        }
-
-        h1 {
-            margin-top: 0;
-            text-align: center;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        label {
-            display: flex;
-            flex-direction: column;
-            font-weight: 600;
-            gap: 0.4rem;
-        }
-
-        input[type="text"],
-        input[type="url"] {
-            padding: 0.5rem;
-            border: 1px solid #444;
-            border-radius: 4px;
-            background: #1e1e1e;
-            color: white;
-        }
-
-        button {
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 0.7rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.3s ease;
-        }
-
-        button:hover {
-            background: #0056b3;
-        }
-
-        .success {
-            color: #4caf50;
-            text-align: center;
-            margin-top: 1rem;
-        }
-
-        .error {
-            color: #f44336;
-            text-align: center;
-            margin-top: 1rem;
-        }
-    </style>
+    <title>Add Game</title>
+    <link rel="stylesheet" href="../css/modals.css">
 </head>
 
 <body>
-    <h1>Añadir nuevo juego</h1>
-    <form id="add-form">
-        <label>
-            ID único:
-            <input type="text" id="game-id" required placeholder="ej. hollowknight" />
-        </label>
+    <div class="formulario">
+        <h1 data-i18n="addGame">Add Game</h1>
+        <form id="add-form">
+            <label>
+                <span data-i18n="id">id</span>
+                <input type="text" id="game-id" required placeholder="example: hollowknight" />
+            </label>
 
-        <label>
-            Título:
-            <input type="text" id="game-title" required placeholder="Nombre del juego" />
-        </label>
+            <label>
+                <span data-i18n="title">id</span>
+                <input type="text" id="game-title" required placeholder="Game Name" />
+            </label>
 
-        <label>
-            Tipo:
-            <input type="text" id="game-type" placeholder="ej. metroidvania, rpg..." />
-        </label>
+            <label>
+                <span data-i18n="genere">id</span>
+                <input type="text" id="game-type" placeholder="example metroidvania, rpg..." />
+            </label>
 
-        <label>
-            Ruta o URL de lanzamiento:
-            <div style="display: flex; gap: 0.5rem;">
-                <input type="text" id="game-url" placeholder="steam://... o ruta a .exe / .lnk" style="flex: 1;" />
-                <button type="button" id="browse-btn">Seleccionar...</button>
-            </div>
-        </label>
+            <label>
+                <span data-i18n="shortcut">id</span>
+                <div style="display: flex; gap: 0.5rem;">
+                    <input type="text" id="game-url" placeholder="steam://... or path to .exe / .lnk"
+                        style="flex: 1;" />
+                    <button class="button" type="button" id="browse-btn">
+                        <span data-i18n="select" class="button-content">Select</span>
+                    </button>
+                </div>
+            </label>
 
-        <label>
-            Icono:
-            <div style="display: flex; gap: 0.5rem;">
-                <input type="text" id="icon-path" readonly style="flex: 1;" placeholder="Selecciona imagen..." />
-                <button type="button" id="select-icon">Elegir</button>
-            </div>
-        </label>
+            <label>
+                <span data-i18n="cover">id</span>
+                <div style="display: flex; gap: 0.5rem;">
+                    <input type="text" id="icon-path" readonly style="flex: 1;" placeholder="Select img..." />
+                    <button class="button" type="button" id="select-icon">
+                        <span data-i18n="select" class="button-content">Select</span>
+                    </button>
+                </div>
+            </label>
 
-        <label>
-            Fondo:
-            <div style="display: flex; gap: 0.5rem;">
-                <input type="text" id="bg-path" readonly style="flex: 1;" placeholder="Selecciona imagen..." />
-                <button type="button" id="select-bg">Elegir</button>
-            </div>
-        </label>
+            <label>
+                <span data-i18n="bg">id</span>
+                <div style="display: flex; gap: 0.5rem;">
+                    <input type="text" id="bg-path" readonly style="flex: 1;" placeholder="Select img..." />
+                    <button class="button" type="button" id="select-bg">
+                        <span data-i18n="select" class="button-content">Select</span>
+                    </button>
+                </div>
+            </label>
 
-        <label>
-            Logo:
-            <div style="display: flex; gap: 0.5rem;">
-                <input type="text" id="logo-path" readonly style="flex: 1;" placeholder="Selecciona imagen..." />
-                <button type="button" id="select-logo">Elegir</button>
-            </div>
-        </label>
+            <label>
+                <span data-i18n="logo">id</span>
+                <div style="display: flex; gap: 0.5rem;">
+                    <input type="text" id="logo-path" readonly style="flex: 1;" placeholder="Select img..." />
+                    <button class="button" type="button" id="select-logo">
+                        <span data-i18n="select" class="button-content">Select</span>
+                    </button>
+                </div>
+            </label>
 
-        <button type="submit">Guardar juego</button>
-        <div id="message"></div>
-    </form>
+            <button class="button" type="submit">
+                <span data-i18n="save" class="button-content">Save</span>
+            </button>
+            <div id="message"></div>
+        </form>
+    </div>
 
+    <script src="../scripts/modalAdd.js"></script>
     <script>
-        /* de igual forma deberia tener su propio js en scripts */
+        const { initI18n } = require("../services/i18n.js");
 
-
-        /* TODO ESTO HACE QUE EL ENVIO DEL FORMULARIO SIRVA, EN CASO DE HACER UN SEGUNDO FORMULARIO
-        IMITAR LOGICA */
-
-        const { ipcRenderer } = require('electron');
-
-        const form = document.getElementById('add-form');
-        const messageDiv = document.getElementById('message');
-
-        const browseBtn = document.getElementById('browse-btn');
-        const gameUrlInput = document.getElementById('game-url');
-
-        const selectIconBtn = document.getElementById('select-icon');
-        const selectBgBtn = document.getElementById('select-bg');
-        const selectLogoBtn = document.getElementById('select-logo');
-        const iconPathInput = document.getElementById('icon-path');
-        const bgPathInput = document.getElementById('bg-path');
-        const logoPathInput = document.getElementById('logo-path');
-
-        function handleBrowse() {
-            ipcRenderer.invoke('select-launcher-path').then((filePath) => {
-                if (filePath) {
-                    gameUrlInput.value = filePath;
-                }
-            });
-        }
-
-        function handleSelectIcon() {
-            ipcRenderer.invoke('select-image-file').then(filePath => {
-                if (filePath) iconPathInput.value = filePath;
-            });
-        }
-
-        function handleSelectBg() {
-            ipcRenderer.invoke('select-image-file').then(filePath => {
-                if (filePath) bgPathInput.value = filePath;
-            });
-        }
-
-        function handleSelectLogo() {
-            ipcRenderer.invoke('select-image-file').then(filePath => {
-                if (filePath) logoPathInput.value = filePath;
-            });
-        }
-
-        browseBtn.addEventListener('click', handleBrowse);
-        selectIconBtn.addEventListener('click', handleSelectIcon);
-        selectBgBtn.addEventListener('click', handleSelectBg);
-        selectLogoBtn.addEventListener('click', handleSelectLogo);
-
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            const id = document.getElementById('game-id').value.trim();
-            const title = document.getElementById('game-title').value.trim();
-            const type = document.getElementById('game-type').value.trim();
-            const url = document.getElementById('game-url').value.trim();
-            const iconPath = iconPathInput.value.trim();
-            const bgPath = bgPathInput.value.trim();
-            const logoPath = logoPathInput.value.trim();
-
-            if (!id || !title || !iconPath || !bgPath || !logoPath) {
-                showMessage('Faltan campos obligatorios', 'error');
-                return;
-            }
-
-            ipcRenderer.send('add-new-game-entry', { id, title, type, url, iconPath, bgPath, logoPath });
+        ipcRenderer.on("set-language", (event, lang) => {
+            initI18n(lang);
         });
-
-        ipcRenderer.on('add-new-game-success', () => {
-            form.reset();
-            ipcRenderer.send('refresh-library');
-            ipcRenderer.send('close-add-new-window');
-            cleanupListeners();
-            console.log('[RENDERER] 🎯 Evento de éxito recibido, solicitando cierre...');
-        });
-
-
-        ipcRenderer.on('add-new-game-error', (event, errorMsg) => {
-            showMessage('❌ Error: ' + errorMsg, 'error');
-        });
-
-        function showMessage(text, type) {
-            messageDiv.textContent = text;
-            messageDiv.className = type;
-        }
-
-        function cleanupListeners() {
-            browseBtn.removeEventListener('click', handleBrowse);
-            selectIconBtn.removeEventListener('click', handleSelectIcon);
-            selectBgBtn.removeEventListener('click', handleSelectBg);
-            selectLogoBtn.removeEventListener('click', handleSelectLogo);
-            form.removeEventListener('submit', handleSubmit);
-        }
     </script>
 
 </body>

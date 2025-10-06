@@ -1,6 +1,8 @@
 // DEPENDENCIAS USADAS EN MAIN
 const { app, BrowserWindow, ipcMain, shell } = require("electron");
 const { ensureConfigFile } = require("./services/getValueOnConfig");
+const { getValue } = require("./services/getValueOnConfig");
+const { setValue } = require("./services/getValueOnConfig");
 const { getBasePath } = require("./services/getPath");
 const path = require("path");
 const fs = require("fs");
@@ -37,8 +39,12 @@ const createWindow = () => {
   // favor no descomentar
   //mainWindow.webContents.openDevTools();
 
-  // esta bien no lo descomento
   mainWindow.loadFile("html/main.html");
+
+  mainWindow.webContents.on("did-finish-load", () => {
+    const lang = getValue("lang") || "en";
+    mainWindow.webContents.send("set-language", lang);
+  });
 };
 
 // uso de la constante para crear la pagina apenas se inicie el app
@@ -198,6 +204,16 @@ ipcMain.on("add-new-game-entry", async (event, gameData) => {
   }
 });
 
+ipcMain.handle("get-language", () => {
+  return getValue("lang") || "es";
+});
+
+// 📌 Renderer cambia idioma → guardamos
+ipcMain.on("set-language", (event, newLang) => {
+  setValue("lang", newLang);
+  console.log(`[MAIN] 🌍 Idioma actualizado a: ${newLang}`);
+});
+
 // el que se encarga de decir "ya se agrego, recarga la libreria visual de la app"
 // si buscas la palabra "refresh-library" en scripts/RenderLibrary.js
 // veras como se usa alla.
@@ -316,7 +332,7 @@ function createAddNewWindow() {
 
   addNewWin = new BrowserWindow({
     width: 720, // ancho
-    height: 520, // alto
+    height: 800, // alto
     resizable: false, // se puede cambiar el ancho y alto?
     minimizable: false, // se puede minimizar?
     maximizable: false, // se puede maximizar?
@@ -335,6 +351,12 @@ function createAddNewWindow() {
   // con esto se carga, el path.join ya es una regla de node.js
   // se abre tan facil como con __dirname, carpeta, archivo.extension
   addNewWin.loadFile(path.join(__dirname, "html", "addNew.html"));
+
+  addNewWin.webContents.on("did-finish-load", () => {
+    const lang = getValue("lang") || "en";
+    console.log("[MAIN] 🌍 Enviando idioma al modal:", lang);
+    addNewWin.webContents.send("set-language", lang);
+  });
 
   // al cerrar vaciar la variable de nuevo
   addNewWin.on("closed", () => {
@@ -366,6 +388,11 @@ function createEditWindow(game, index) {
   });
 
   editWin.loadFile(path.join(__dirname, "html", "edit.html"));
+
+  editWin.webContents.on("did-finish-load", () => {
+    const lang = getValue("lang") || "en";
+    editWin.webContents.send("set-language", lang);
+  });
 
   // 👇 MUY IMPORTANTE: Esperamos a que la ventana cargue antes de enviar datos
   ipcMain.once("edit-game-window-ready", () => {
