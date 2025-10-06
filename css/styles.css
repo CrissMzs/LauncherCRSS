@@ -127,7 +127,7 @@
   filter: blur(5px) brightness(0.6); 
   transform: scale(1.1);
   transition: background-image 0.3s ease, opacity 0.3s ease;
-  z-index: 0;
+  z-index: 1;
 }
 
 .gradient-overlay {
@@ -137,10 +137,31 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 0; 
+  z-index: 1; 
   background: 
     linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 15%),
     linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 50%);
+}
+
+#gradient-canvas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  --gradient-color-1: #070707;
+  --gradient-color-2: #131313;
+  --gradient-color-3: #242424;
+  --gradient-color-4: #111111;
+  z-index: 0;
+}
+
+
+.particles {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.particles.visible {
+  opacity: 1;
 }
 
 .navbar,

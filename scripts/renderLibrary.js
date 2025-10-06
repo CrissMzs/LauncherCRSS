@@ -122,18 +122,25 @@ function updateBackgroundForIndex(index) {
   const wrappers = getWrappers();
   if (index < 0 || index >= wrappers.length) return;
 
-  // obtener id del juego activo
-  const activeWrapper = wrappers[index];
-  const gameTitle = activeWrapper.querySelector(".game-title")?.textContent;
-
   const library = getLibrary();
   const game = library[index];
   if (!game) return;
 
-  const bgFileName = `${game.id}_background.png`;
-  const bgPath = path.join(getBasePath(), "assets", bgFileName);
+  const particlesDiv = document.querySelector('.particles');
+  if (particlesDiv) {
+    if (game.id === 'add-new') {
+      particlesDiv.style.display = 'block';
+      particlesDiv.style.opacity = 1;
+    } else {
+      particlesDiv.style.display = 'none';
+      particlesDiv.style.opacity = 0;
+    }
+  }
 
-  const bgContainer = document.querySelector(".game-background");
+  const bgFileName = `${game.id}_background.png`;
+  const bgPath = path.join(getBasePath(), 'assets', bgFileName);
+
+  const bgContainer = document.querySelector('.game-background');
   if (fs.existsSync(bgPath)) {
     const bgUrl = pathToFileURL(bgPath).href;
     bgContainer.style.backgroundImage = `url('${bgUrl}')`;
@@ -141,6 +148,7 @@ function updateBackgroundForIndex(index) {
     bgContainer.style.backgroundImage = `none`;
   }
 }
+
 function scrollToIndex(index) {
   const wrappers = getWrappers();
   if (index < 0 || index >= wrappers.length) return;

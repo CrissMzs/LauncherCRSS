@@ -11,7 +11,8 @@
   "author": "CRSS",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^38.2.1"
+    "electron": "^38.2.1",
+    "sass": "^1.93.2"
   },
   "dependencies": {
     "electron-reload": "^2.0.0-alpha.1",
