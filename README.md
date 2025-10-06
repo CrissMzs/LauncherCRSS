@@ -6,16 +6,16 @@ A customizable game launcher inspired by the PlayStation 5 interface, built with
 ![LauncherCRSS Screenshot](./assets/screenshot.png)
 
 
-* 🚀 Features
+### 🚀 Features
 * 🖼️ PS5-inspired UI with smooth animations and a horizontal game gallery.
 * 🌐 Multi-language (i18n) support, configured via config.json.
-* 🧠 Local library system stored in library.json.
+* 🧠 Local library system stored.
 * 📎 Supports shortcuts / executables / URLs (e.g., Steam, Epic, etc).
 * 🧰 Admin panel to:
-* Add new games with custom cover, background, and logo images.
-* Edit existing entries.
-* Automatically reorder recently played games to the top.
-* 🌌 Configurable particle effects, controlled from config.json.
+  * Add new games with custom cover, background, and logo images.
+  * Edit existing entries.
+  * Automatically reorder recently played games to the top.
+* 🌌 Configurable particle effects, (Not yet in front-end).
 * 🔄 Dynamic UI reload after edits — no restart required.
 
 ## 🎮 Controls
