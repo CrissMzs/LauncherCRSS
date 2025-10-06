@@ -30,6 +30,8 @@ A customizable game launcher inspired by the PlayStation 5 interface, built with
 * Windows 10/11 (primary support) — may work on Linux with adjustments.
 
 ## **Particles are in beta** — this feature may have visual glitches.
+
+![LauncherCRSS Screenshot](./assets/screenshot3.png)
 ![LauncherCRSS Screenshot](./assets/screenshot2.png)
 
 ### 📝 License
