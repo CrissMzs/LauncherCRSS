@@ -16,11 +16,6 @@ out/
 *.log
 
 # =========================
-# 🖼️ Assets generados en runtime (si generas en proyecto)
-assets/*
-!assets/.gitkeep
-
-# =========================
 # 📝 Config local / runtime
 # =========================
 config.json
