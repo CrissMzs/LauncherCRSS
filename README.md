@@ -1,4 +1,4 @@
-# LauncherCRSS
+# 🎮 LauncherCRSS (Beta 0.0.1)
 
 A customizable game launcher inspired by the PlayStation 5 interface, built with Electron, HTML, CSS, and JavaScript.
 ### It lets you organize, personalize, and launch your favorite games in an elegant, fast, and visually rich way ✨
