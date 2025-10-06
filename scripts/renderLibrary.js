@@ -128,12 +128,15 @@ function updateBackgroundForIndex(index) {
 
   const particlesDiv = document.querySelector('.particles');
   if (particlesDiv) {
+    let opacity;
+    let allways = 0;
+    let display = "none";
     if (game.id === 'add-new') {
       particlesDiv.style.display = 'block';
-      particlesDiv.style.opacity = 1;
+      particlesDiv.style.opacity = (getValue("particles") ?? 0) ? 1 : 0;
     } else {
-      particlesDiv.style.display = 'none';
-      particlesDiv.style.opacity = 0;
+      particlesDiv.style.display = (getValue("particles") && getValue("alwaysParticles")) ? "block" : "none";
+      particlesDiv.style.opacity = (getValue("particles") && getValue("alwaysParticles")) ? 1 : 0;
     }
   }
 

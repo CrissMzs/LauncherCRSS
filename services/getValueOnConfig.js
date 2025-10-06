@@ -16,7 +16,9 @@ function ensureConfigFile() {
   if (!fs.existsSync(configPath)) {
     const defaultConfig = {
       username: "Guest",
-      lang: "en"
+      lang: "en",
+      particles: true,
+      alwaysParticles: false,
     };
     fs.writeFileSync(configPath, JSON.stringify(defaultConfig, null, 2), 'utf-8');
   }
