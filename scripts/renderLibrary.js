@@ -88,10 +88,15 @@ window.addEventListener("DOMContentLoaded", () => {
   gallery.appendChild(spacer);
 
   const spinner = document.getElementById("loading-spinner");
+  const gradientCanvas = document.getElementById("gradient-canvas");
+  const navbar = document.getElementById("navbar");
+
   if (spinner) {
     setTimeout(() => {
+      navbar.style.opacity = 1;
+      gradientCanvas.style.zIndex = "0";
       spinner.classList.add("hidden");
-    }, 300);
+    }, 1600);
   }
 });
 
