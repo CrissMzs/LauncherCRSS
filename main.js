@@ -37,7 +37,7 @@ const createWindow = () => {
     },
   });
   // favor no descomentar
-  //mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 
   mainWindow.loadFile("html/main.html");
 

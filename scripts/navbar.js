@@ -14,7 +14,7 @@ window.addEventListener("DOMContentLoaded", () => {
   // en la seccion del navbar hay un span con id userman
   // estamos obteniendolo y cambiandole el contenido a bienvenido, el nombre de usuario obtenido antes.
   const navbar = document.getElementById("userman");
-  navbar.textContent = `${username}`;
+  navbar.textContent = `, ${username}`;
 });
 
 window.addEventListener('DOMContentLoaded', () => {
