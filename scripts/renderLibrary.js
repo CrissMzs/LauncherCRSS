@@ -14,90 +14,93 @@ const { pathToFileURL } = require("url");
 // la logica no es complicada pero como es js, es algo chistosa.
 
 window.addEventListener("DOMContentLoaded", () => {
-  const gallery = document.getElementById("game-gallery");
-  const library = getLibrary();
-  const leftSpacer = document.createElement("div");
-  leftSpacer.style.flex = "0 0 60px";
-  gallery.appendChild(leftSpacer);
+  setTimeout(() => {
+    const gallery = document.getElementById("game-gallery");
+    const library = getLibrary();
+    const leftSpacer = document.createElement("div");
+    leftSpacer.style.flex = "0 0 60px";
+    gallery.appendChild(leftSpacer);
 
-  library.forEach((game) => {
-    const entryWrapper = document.createElement("div");
-    entryWrapper.classList.add("entry-wrapper");
+    library.forEach((game) => {
+      const entryWrapper = document.createElement("div");
+      entryWrapper.classList.add("entry-wrapper");
 
-    const entry = document.createElement("div");
-    entry.classList.add("entry");
+      const entry = document.createElement("div");
+      entry.classList.add("entry");
 
-    if (game.type === "special") {
-      entry.classList.add("special-entry");
-      entry.textContent = game.icon || "+";
-    } else {
-      const icoFileName = `${game.id}_ico.png`;
-      const logoFileName = `${game.id}_logo.png`;
+      if (game.type === "special") {
+        entry.classList.add("special-entry");
+        entry.textContent = game.icon || "+";
+      } else {
+        const icoFileName = `${game.id}_ico.png`;
+        const logoFileName = `${game.id}_logo.png`;
 
-      const icoPath = path.join(getBasePath(), "assets", icoFileName);
-      const logoPath = path.join(getBasePath(), "assets", logoFileName);
+        const icoPath = path.join(getBasePath(), "assets", icoFileName);
+        const logoPath = path.join(getBasePath(), "assets", logoFileName);
 
-      let icoURL = fs.existsSync(icoPath)
-        ? pathToFileURL(icoPath).href
-        : "https://via.placeholder.com/300x400?text=No+Image";
+        let icoURL = fs.existsSync(icoPath)
+          ? pathToFileURL(icoPath).href
+          : "https://via.placeholder.com/300x400?text=No+Image";
 
-      let logoURL = fs.existsSync(logoPath) ? pathToFileURL(logoPath).href : "";
+        let logoURL = fs.existsSync(logoPath)
+          ? pathToFileURL(logoPath).href
+          : "";
 
-      const bgDiv = document.createElement("div");
-      bgDiv.classList.add("entry-bg");
-      bgDiv.style.backgroundImage = `url('${icoURL}')`;
+        const bgDiv = document.createElement("div");
+        bgDiv.classList.add("entry-bg");
+        bgDiv.style.backgroundImage = `url('${icoURL}')`;
 
-      const overlayDiv = document.createElement("div");
-      overlayDiv.classList.add("entry-overlay");
-      if (logoURL) {
-        overlayDiv.style.backgroundImage = `url('${logoURL}')`;
+        const overlayDiv = document.createElement("div");
+        overlayDiv.classList.add("entry-overlay");
+        if (logoURL) {
+          overlayDiv.style.backgroundImage = `url('${logoURL}')`;
+        }
+
+        entry.appendChild(bgDiv);
+        entry.appendChild(overlayDiv);
+
+        if (game.url && game.url !== "null") {
+          entry.addEventListener("click", () => openGame(game.url, game.id));
+        }
       }
 
-      entry.appendChild(bgDiv);
-      entry.appendChild(overlayDiv);
+      const title = document.createElement("p");
+      title.classList.add("game-title");
+      title.textContent = game.title || "";
 
-      if (game.url && game.url !== "null") {
-        entry.addEventListener("click", () => openGame(game.url, game.id));
-      }
+      entryWrapper.appendChild(entry);
+      entryWrapper.appendChild(title);
+      gallery.appendChild(entryWrapper);
+    });
+
+    // aqui hacemos el el "select sea el primero"
+    if (library.length > 0) {
+      currentIndex = 0;
+      updateActiveItem();
+      updateBackgroundForIndex(currentIndex);
     }
 
-    const title = document.createElement("p");
-    title.classList.add("game-title");
-    title.textContent = game.title || "";
+    const wrapperWidth =
+      document.querySelector(".entry-wrapper")?.offsetWidth || 240;
+    const galleryWidth = gallery.clientWidth;
+    const spacerWidth = galleryWidth - wrapperWidth - 40;
 
-    entryWrapper.appendChild(entry);
-    entryWrapper.appendChild(title);
-    gallery.appendChild(entryWrapper);
-  });
+    const spacer = document.createElement("div");
+    spacer.style.flex = "0 0 auto";
+    spacer.style.width = `${spacerWidth}px`;
+    gallery.appendChild(spacer);
+    const spinner = document.getElementById("loading-spinner");
+    const gradientCanvas = document.getElementById("gradient-canvas");
+    const navbar = document.getElementById("navbar");
 
-  // aqui hacemos el el "select sea el primero"
-  if (library.length > 0) {
-    currentIndex = 0;
-    updateActiveItem();
-    updateBackgroundForIndex(currentIndex);
-  }
-
-  const wrapperWidth =
-    document.querySelector(".entry-wrapper")?.offsetWidth || 240;
-  const galleryWidth = gallery.clientWidth;
-  const spacerWidth = galleryWidth - wrapperWidth - 40;
-
-  const spacer = document.createElement("div");
-  spacer.style.flex = "0 0 auto";
-  spacer.style.width = `${spacerWidth}px`;
-  gallery.appendChild(spacer);
-
-  const spinner = document.getElementById("loading-spinner");
-  const gradientCanvas = document.getElementById("gradient-canvas");
-  const navbar = document.getElementById("navbar");
-
-  if (spinner) {
-    setTimeout(() => {
-      navbar.style.opacity = 1;
-      gradientCanvas.style.zIndex = "0";
-      spinner.classList.add("hidden");
-    }, 1600);
-  }
+    if (spinner) {
+      setTimeout(() => {
+        navbar.style.opacity = 1;
+        gradientCanvas.style.zIndex = "0";
+        spinner.classList.add("hidden");
+      }, 1100);
+    }
+  }, 500);
 });
 
 const gallery = document.getElementById("game-gallery");
@@ -131,24 +134,26 @@ function updateBackgroundForIndex(index) {
   const game = library[index];
   if (!game) return;
 
-  const particlesDiv = document.querySelector('.particles');
+  const particlesDiv = document.querySelector(".particles");
   if (particlesDiv) {
     let opacity;
     let allways = 0;
     let display = "none";
-    if (game.id === 'add-new') {
-      particlesDiv.style.display = 'block';
-      particlesDiv.style.opacity = (getValue("particles") ?? 0) ? 1 : 0;
+    if (game.id === "add-new") {
+      particlesDiv.style.display = "block";
+      particlesDiv.style.opacity = getValue("particles") ?? 0 ? 1 : 0;
     } else {
-      particlesDiv.style.display = (getValue("particles") && getValue("alwaysParticles")) ? "block" : "none";
-      particlesDiv.style.opacity = (getValue("particles") && getValue("alwaysParticles")) ? 1 : 0;
+      particlesDiv.style.display =
+        getValue("particles") && getValue("alwaysParticles") ? "block" : "none";
+      particlesDiv.style.opacity =
+        getValue("particles") && getValue("alwaysParticles") ? 1 : 0;
     }
   }
 
   const bgFileName = `${game.id}_background.png`;
-  const bgPath = path.join(getBasePath(), 'assets', bgFileName);
+  const bgPath = path.join(getBasePath(), "assets", bgFileName);
 
-  const bgContainer = document.querySelector('.game-background');
+  const bgContainer = document.querySelector(".game-background");
   if (fs.existsSync(bgPath)) {
     const bgUrl = pathToFileURL(bgPath).href;
     bgContainer.style.backgroundImage = `url('${bgUrl}')`;
@@ -202,17 +207,17 @@ window.addEventListener("keydown", (e) => {
       }
       break;
 
-case "e":
-  {
-    const library = getLibrary();
-    const game = library[currentIndex];
-    if (!game) return;
-    if (game.id === "add-new") return;
+    case "e":
+      {
+        const library = getLibrary();
+        const game = library[currentIndex];
+        if (!game) return;
+        if (game.id === "add-new") return;
 
-    const { ipcRenderer } = require("electron");
-    ipcRenderer.send("open-edit-window", { game, index: currentIndex });
-  }
-  break;
+        const { ipcRenderer } = require("electron");
+        ipcRenderer.send("open-edit-window", { game, index: currentIndex });
+      }
+      break;
 
     case "enter":
     case " ":
