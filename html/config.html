@@ -5,38 +5,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Configuration</title>
-    <link rel="stylesheet" href="../css/modals.css">
+    <link rel="stylesheet" href="../css/modalNew.css">
 </head>
 
 <body>
-    <div class="formulario">
-        <h1 data-i18n="configTitle">Configuration</h1>
+    <div class="ps5-modal">
+        <p class="formTitle" data-i18n="configTitle">Configuration</p>
 
-        <form id="config-form">
-            <label>
-                <span data-i18n="username">Username</span>
-                <input type="text" id="username-input" placeholder="Your name..." required>
-            </label>
+        <form class="form" id="config-form">
+            <div class="containForm">
+                <label>
+                    <span data-i18n="username">Username</span>
+                    <input type="text" id="username-input" placeholder="Your name..." required>
+                </label>
 
-            <label>
-                <span data-i18n="language">Language</span>
-                <select id="lang-select">
-                    <option value="en">English</option>
-                    <option value="es">Español</option>
-                </select>
-            </label>
+                <label>
+                    <span data-i18n="language">Language</span>
+                    <select id="lang-select">
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                    </select>
+                </label>
+            </div>
 
-            <button class="button" type="submit">
-                <span class="button-content" data-i18n="save">Save</span>
-            </button>
+            <div class="buttonsForm">
+                <button class="ps5-button" id="submit">
+                    <span class="button-content" data-i18n="reload">Save</span>
+                </button>
+                <a class="ps5-button" id="closeBtn">
+                    <span class="button-content" data-i18n="close">Close</span>
+                </a>
+            </div>
         </form>
     </div>
-    
+
     <script src="../scripts/config.js"></script>
     <script>
         const { initI18n } = require("../services/i18n.js");
-
-        // 🌐 Inicializa idioma cuando lo envía main
         ipcRenderer.on("set-language", (event, lang) => {
             initI18n(lang);
         });

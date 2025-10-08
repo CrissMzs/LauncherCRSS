@@ -14,11 +14,13 @@ const bgPathInput = document.getElementById("bg-path");
 const logoPathInput = document.getElementById("logo-path");
 
 let currentIndex = null;
+let id = null;
 
 // 📌 Al abrir el modal → rellenar datos básicos
 ipcRenderer.on("edit-game-data", (event, { game, index }) => {
   currentIndex = index;
   /* document.getElementById("game-id").value = game.id || "sexo"; */
+  id = game.id;
   document.getElementById("game-title").value = game.title || "";
   document.getElementById("game-type").value = game.type || "";
   document.getElementById("game-url").value = game.url || "";
@@ -64,7 +66,7 @@ form.addEventListener("submit", (e) => {
   e.preventDefault();
 
   const updatedGame = {
-    id: document.getElementById("game-id").value.trim(),
+    id: id,
     title: document.getElementById("game-title").value.trim(),
     type: document.getElementById("game-type").value.trim(),
     url: gameUrlInput.value.trim(),

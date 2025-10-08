@@ -355,8 +355,8 @@ function createAddNewWindow() {
   }
 
   addNewWin = new BrowserWindow({
-    width: 720, // ancho
-    height: 800, // alto
+    width: 520, // ancho
+    height: 625, // alto
     resizable: false, // se puede cambiar el ancho y alto?
     minimizable: false, // se puede minimizar?
     maximizable: false, // se puede maximizar?
@@ -364,7 +364,7 @@ function createAddNewWindow() {
     parent: BrowserWindow.getAllWindows()[0] || null,
     modal: true, // es un modal?
     autoHideMenuBar: true, // oculta la cinta de opciones (File, Edit, Select, Window)
-    frame: true, // Tiene botones del sistema? (Cerrar, maximizar, etc) Como ya quite dos alla arriba, dejo el de cerrar
+    frame: false, // Tiene botones del sistema? (Cerrar, maximizar, etc) Como ya quite dos alla arriba, dejo el de cerrar
     webPreferences: {
       nodeIntegration: true, // Esto le da permisos de edicion externa al HTML
       contextIsolation: false, // Esto dejarlo asi
@@ -436,12 +436,13 @@ function openModalFirstOpen(isFirstOpen) {
 
   configWin = new BrowserWindow({
     width: 500,
-    height: 700,
+    height: 350,
     resizable: false,
     minimizable: false,
     maximizable: false,
     modal: true,
     autoHideMenuBar: true,
+    frame: false,
     parent: BrowserWindow.getFocusedWindow(),
     webPreferences: {
       nodeIntegration: true,

@@ -18,6 +18,8 @@ const iconPathInput = document.getElementById("icon-path");
 const bgPathInput = document.getElementById("bg-path");
 const logoPathInput = document.getElementById("logo-path");
 
+const closeBtn = document.getElementById("closeBtn");
+
 function handleBrowse() {
   ipcRenderer.invoke("select-launcher-path").then((filePath) => {
     if (filePath) {
@@ -101,3 +103,7 @@ function cleanupListeners() {
   selectLogoBtn.removeEventListener("click", handleSelectLogo);
   form.removeEventListener("submit", handleSubmit);
 }
+
+closeBtn.addEventListener("click", () => {
+  window.close();
+});
