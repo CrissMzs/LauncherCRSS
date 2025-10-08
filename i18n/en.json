@@ -4,6 +4,8 @@
   "addGame": "Add New",
   "edit_game": "Edit Game",
   "save": "Save",
+  "reload": "Reload",
+  "close": "Close",
   "cancel": "Cancel",
   "id": "ID:",
   "title": "Title",

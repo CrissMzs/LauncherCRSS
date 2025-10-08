@@ -6,6 +6,8 @@ const usernameInput = document.getElementById("username-input");
 const langSelect = document.getElementById("lang-select");
 
 let isFirstOpen = false;
+const closeBtn = document.getElementById("closeBtn");
+const submit = document.getElementById("submit");
 
 ipcRenderer.on("isFirstOpen", (event, data) => {
   isFirstOpen = data.isFirstOpen;
@@ -28,5 +30,9 @@ form.addEventListener("submit", (e) => {
   ipcRenderer.send("set-language", lang);
 
   ipcRenderer.send("refresh-library");
+  window.close();
+});
+
+closeBtn.addEventListener("click", () => {
   window.close();
 });

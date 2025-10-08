@@ -5,72 +5,80 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Add Game</title>
-    <link rel="stylesheet" href="../css/modals.css">
+    <link rel="stylesheet" href="../css/modalNew.css">
 </head>
 
 <body>
-    <div class="formulario">
-        <h1 data-i18n="addGame">Add Game</h1>
-        <form id="add-form">
-            <label>
-                <span data-i18n="id">id</span>
-                <input type="text" id="game-id" required placeholder="example: hollowknight" />
-            </label>
+    <div class="ps5-modal">
+        <p data-i18n="addGame" class="formTitle">Add Game</p>
 
-            <label>
-                <span data-i18n="title">id</span>
-                <input type="text" id="game-title" required placeholder="Game Name" />
-            </label>
+        <form id="add-form" class="form">
+            <div>
+                <label>
+                    <span data-i18n="id">ID</span>
+                    <input type="text" id="game-id" required placeholder="example: hollowknight" />
+                </label>
 
-            <label>
-                <span data-i18n="genere">id</span>
-                <input type="text" id="game-type" placeholder="example metroidvania, rpg..." />
-            </label>
+                <label>
+                    <span data-i18n="title">Title</span>
+                    <input type="text" id="game-title" required placeholder="Game Name" />
+                </label>
 
-            <label>
-                <span data-i18n="shortcut">id</span>
-                <div style="display: flex; gap: 0.5rem;">
-                    <input type="text" id="game-url" placeholder="steam://... or path to .exe / .lnk"
-                        style="flex: 1;" />
-                    <button class="button" type="button" id="browse-btn">
-                        <span data-i18n="select" class="button-content">Select</span>
-                    </button>
-                </div>
-            </label>
+                <label>
+                    <span data-i18n="genere">Genre</span>
+                    <input type="text" id="game-type" placeholder="example metroidvania, rpg..." />
+                </label>
 
-            <label>
-                <span data-i18n="cover">id</span>
-                <div style="display: flex; gap: 0.5rem;">
-                    <input type="text" id="icon-path" readonly style="flex: 1;" placeholder="Select img..." />
-                    <button class="button" type="button" id="select-icon">
-                        <span data-i18n="select" class="button-content">Select</span>
-                    </button>
-                </div>
-            </label>
+                <label>
+                    <span data-i18n="shortcut">Shortcut</span>
+                    <div class="input-group">
+                        <input type="text" id="game-url" placeholder="steam://... or path to .exe / .lnk" />
+                        <button class="ps5-button" type="button" id="browse-btn">
+                            <span data-i18n="select" class="button-content">Select</span>
+                        </button>
+                    </div>
+                </label>
 
-            <label>
-                <span data-i18n="bg">id</span>
-                <div style="display: flex; gap: 0.5rem;">
-                    <input type="text" id="bg-path" readonly style="flex: 1;" placeholder="Select img..." />
-                    <button class="button" type="button" id="select-bg">
-                        <span data-i18n="select" class="button-content">Select</span>
-                    </button>
-                </div>
-            </label>
+                <label>
+                    <span data-i18n="cover">Cover</span>
+                    <div class="input-group">
+                        <input type="text" id="icon-path" readonly placeholder="Select img..." />
+                        <button class="ps5-button" type="button" id="select-icon">
+                            <span data-i18n="select" class="button-content">Select</span>
+                        </button>
+                    </div>
+                </label>
 
-            <label>
-                <span data-i18n="logo">id</span>
-                <div style="display: flex; gap: 0.5rem;">
-                    <input type="text" id="logo-path" readonly style="flex: 1;" placeholder="Select img..." />
-                    <button class="button" type="button" id="select-logo">
-                        <span data-i18n="select" class="button-content">Select</span>
-                    </button>
-                </div>
-            </label>
+                <label>
+                    <span data-i18n="bg">Background</span>
+                    <div class="input-group">
+                        <input type="text" id="bg-path" readonly placeholder="Select img..." />
+                        <button class="ps5-button" type="button" id="select-bg">
+                            <span data-i18n="select" class="button-content">Select</span>
+                        </button>
+                    </div>
+                </label>
 
-            <button class="button" type="submit">
-                <span data-i18n="save" class="button-content">Save</span>
-            </button>
+                <label>
+                    <span data-i18n="logo">Logo</span>
+                    <div class="input-group">
+                        <input type="text" id="logo-path" readonly placeholder="Select img..." />
+                        <button class="ps5-button" type="button" id="select-logo">
+                            <span data-i18n="select" class="button-content">Select</span>
+                        </button>
+                    </div>
+                </label>
+            </div>
+
+            <div class="buttonsForm">
+                <button class="ps5-button" type="submit">
+                    <span data-i18n="save" class="button-content">Save</span>
+                </button>
+                <a class="ps5-button" id="closeBtn">
+                    <span class="button-content" data-i18n="close">Close</span>
+                </a>
+            </div>
+
             <div id="message"></div>
         </form>
     </div>
@@ -83,7 +91,6 @@
             initI18n(lang);
         });
     </script>
-
 </body>
 
 </html>
