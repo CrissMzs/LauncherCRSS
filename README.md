@@ -13,12 +13,13 @@ A customizable game launcher inspired by the PlayStation 5 interface, built with
 * 📎 Supports shortcuts / executables / URLs (e.g., Steam, Epic, etc).
 * 🧰 Admin panel to:
   * Add new games with custom cover, background, and logo images.
+    ![LauncherCRSS Screenshot](./assets/screenshot5.png)
   * Edit existing entries.
   * Automatically reorder recently played games to the top.
 * 🌌 Configurable particle effects, (Not yet in front-end).
 * 🔄 Dynamic UI reload after edits — no restart required.
 * ⚙️ Configuration menu
-  ![LauncherCRSS Screenshot](./assets/screenshot2.png)
+  ![LauncherCRSS Screenshot](./assets/screenshot1.png)
   * Username
   * Language (En/Es)
 
