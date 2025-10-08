@@ -85,7 +85,7 @@ ipcRenderer.on("add-new-game-success", () => {
 });
 
 ipcRenderer.on("add-new-game-error", (event, errorMsg) => {
-  showMessage("❌ Error: " + errorMsg, "error");
+  showMessage("Error: " + errorMsg, "error");
 });
 
 function showMessage(text, type) {

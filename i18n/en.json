@@ -12,5 +12,8 @@
   "cover": "Cover",
   "bg": "Background",
   "logo": "Icon",
-  "select": "Select"
+  "select": "Select",
+  "configTitle": "Configuration",
+  "language": "Language",
+  "username": "Username"
 }

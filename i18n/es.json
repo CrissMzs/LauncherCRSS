@@ -12,5 +12,8 @@
   "cover": "Portada",
   "bg": "Fondo",
   "logo": "Logo Transparente",
-  "select": "Seleccionar"
+  "select": "Seleccionar",
+  "configTitle": "Configuracion",
+  "language": "Idioma",
+  "username": "Nombre de usuario"
 }

@@ -5,6 +5,12 @@ const { setValue } = require('../services/getValueOnConfig');
 // el valor que le pido del archivo config en APPDATA/ROAMING/LAUNCHERCRSS
 // si guardas alguna variable en ese archivo, puedes leerla asi
 
+const configBtn = document.getElementById("configBtn");
+
+configBtn.addEventListener("click", () => {
+  ipcRenderer.send("open-first-config", { isFirstOpen: false });
+});
+
 // esto agrega un listener al DOM, el DOM es el contenido REDERIZADO en la pagina
 window.addEventListener("DOMContentLoaded", () => {
   // creamos una variable de texto que tiene EL NOMBRE EN EL ARCHIVO o si no hay nombre o no hay archivo

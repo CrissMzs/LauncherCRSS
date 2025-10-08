@@ -399,3 +399,80 @@ body {
     opacity: 0;
   }
 }
+
+#configBtn {
+  all: unset; 
+  position: relative;
+  margin-left: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: white;
+  background: transparent;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  overflow: visible;
+  transition: transform 0.2s ease;
+}
+
+/* Quitar outline al enfocarse con teclado */
+#configBtn:focus {
+  outline: none;
+}
+
+/* ✨ Glow giratorio en el borde */
+#configBtn::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  padding: 2px;
+  background: conic-gradient(
+    from 0deg,
+    rgba(255, 255, 255, 0) 0deg 1deg,
+    rgba(255, 255, 255, 0.9) 1deg 60deg,
+    rgba(255, 255, 255, 0) 60deg 180deg,
+    rgba(255, 255, 255, 0.9) 180deg 240deg,
+    rgba(255, 255, 255, 0) 240deg 360deg
+  );
+  -webkit-mask: 
+    linear-gradient(#000 0 0) content-box, 
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  animation: spinBorder 3s linear infinite;
+  z-index: 0;
+}
+
+/* ✨ Solo visible cuando está activa por navegación o hover */
+#configBtn:hover::before,
+#configBtn.nav-active::before {
+  opacity: 1;
+}
+
+/* Escala y glow al activarse con teclado */
+#configBtn.nav-active {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+#configBtn p {
+  z-index: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+@keyframes spinBorder {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+

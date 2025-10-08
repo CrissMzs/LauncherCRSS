@@ -14,6 +14,7 @@ function ensureConfigFile() {
   }
 
   if (!fs.existsSync(configPath)) {
+    ipcRenderer.send("open-first-config",{isFirstOpen: true});
     const defaultConfig = {
       username: "Guest",
       lang: "en",

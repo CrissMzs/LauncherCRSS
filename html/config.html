@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration</title>
+    <link rel="stylesheet" href="../css/modals.css">
+</head>
+
+<body>
+    <div class="formulario">
+        <h1 data-i18n="configTitle">Configuration</h1>
+
+        <form id="config-form">
+            <label>
+                <span data-i18n="username">Username</span>
+                <input type="text" id="username-input" placeholder="Your name..." required>
+            </label>
+
+            <label>
+                <span data-i18n="language">Language</span>
+                <select id="lang-select">
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                </select>
+            </label>
+
+            <button class="button" type="submit">
+                <span class="button-content" data-i18n="save">Save</span>
+            </button>
+        </form>
+    </div>
+    
+    <script src="../scripts/config.js"></script>
+    <script>
+        const { initI18n } = require("../services/i18n.js");
+
+        // 🌐 Inicializa idioma cuando lo envía main
+        ipcRenderer.on("set-language", (event, lang) => {
+            initI18n(lang);
+        });
+    </script>
+</body>
+
+</html>

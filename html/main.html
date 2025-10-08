@@ -10,11 +10,11 @@
 </head>
 
 <body>
-<div id="loading-spinner">
-  <div class="loader">
-    <img src="../assets/ps5.png" alt="PS5 Logo" class="loader-logo">
+  <div id="loading-spinner">
+    <div class="loader">
+      <img src="../assets/ps5.png" alt="PS5 Logo" class="loader-logo">
+    </div>
   </div>
-</div>
 
   <div class="game-background"></div>
   <div class="particles">
@@ -126,22 +126,25 @@
 
 
   <div id="navbar" class="navbar">
-  <div class="navbar-left">
-    <span data-i18n="games">Games</span>
-  </div>
+    <div class="navbar-left">
+      <span data-i18n="games">Games</span>
+    </div>
 
-  <div class="navbar-right" style="display: flex; align-items: center;">
-    <!-- 🌍 Selector de idioma -->
-    <select id="language-selector" class="lang-select" style="margin-right: 40px;">
+    <div class="navbar-right" style="display: flex; align-items: center;">
+      <!-- 🌍 Selector de idioma -->
+      <!-- <select id="language-selector" class="lang-select" style="margin-right: 40px;">
       <option value="es">🇪🇸 ES</option>
       <option value="en">🇺🇸 EN</option>
-    </select>
+    </select> -->
 
-    <span id="welcome-message" data-i18n="welcome">Welcome</span>
-    <span id="userman"></span>
-    <span style="margin-left: 30px;" id="clock"></span>
+      <span id="welcome-message" data-i18n="welcome">Welcome</span>
+      <span id="userman"></span>
+      <span style="margin-left: 30px;" id="clock"></span>
+      <button id="configBtn">⚙️</button>
+
+
+    </div>
   </div>
-</div>
 
   <!-- Galería de juegos -->
   <div class="content">

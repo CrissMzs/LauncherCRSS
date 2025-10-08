@@ -18,7 +18,7 @@ let currentIndex = null;
 // 📌 Al abrir el modal → rellenar datos básicos
 ipcRenderer.on("edit-game-data", (event, { game, index }) => {
   currentIndex = index;
-  document.getElementById("game-id").value = game.id || "sexo";
+  /* document.getElementById("game-id").value = game.id || "sexo"; */
   document.getElementById("game-title").value = game.title || "";
   document.getElementById("game-type").value = game.type || "";
   document.getElementById("game-url").value = game.url || "";

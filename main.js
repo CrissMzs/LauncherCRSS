@@ -16,6 +16,7 @@ const { putFirst } = require("./services/reOrder");
 let addNewWin = null;
 let mainWindow;
 let editWindow = null;
+let configWin = null;
 
 // necesario para dev
 try {
@@ -166,6 +167,30 @@ ipcMain.on("add-new-game-entry", async (event, gameData) => {
       fs.mkdirSync(assetsPath, { recursive: true });
     }
 
+    if (!fs.existsSync(libraryPath)) {
+      throw new Error("library.json no encontrado");
+    }
+
+    const rawLibrary = fs.readFileSync(libraryPath, "utf8");
+    const library = JSON.parse(rawLibrary);
+
+    const idExists = library.some((item) => item.id === id);
+    if (idExists) {
+      const lang = getValue("lang") || "en";
+      let errorMessage = "";
+
+      switch (lang) {
+        case "es":
+          errorMessage = `Ya existe un juego con el ID "${id}".`;
+          break;
+        case "en":
+        default:
+          errorMessage = `A game with the ID "${id}" already exists.`;
+          break;
+      }
+
+      throw new Error(errorMessage);
+    }
     const iconOutput = path.join(assetsPath, `${id}_ico.png`);
     console.log("[MAIN] Procesando imágenes:", { iconPath });
     await sharp(iconPath).resize({ width: 900 }).png().toFile(iconOutput);
@@ -177,13 +202,6 @@ ipcMain.on("add-new-game-entry", async (event, gameData) => {
     const logoOutput = path.join(assetsPath, `${id}_logo.png`);
     console.log("[MAIN] Procesando imágenes:", { logoPath });
     await sharp(logoPath).resize({ width: 900 }).png().toFile(logoOutput);
-
-    if (!fs.existsSync(libraryPath)) {
-      throw new Error("library.json no encontrado");
-    }
-
-    const rawLibrary = fs.readFileSync(libraryPath, "utf8");
-    const library = JSON.parse(rawLibrary);
 
     const newEntry = { id, title, type, url };
 
@@ -212,6 +230,12 @@ ipcMain.handle("get-language", () => {
 ipcMain.on("set-language", (event, newLang) => {
   setValue("lang", newLang);
   console.log(`[MAIN] 🌍 Idioma actualizado a: ${newLang}`);
+});
+
+// Cambiar username
+ipcMain.on("set-username", (event, name) => {
+  setValue("username", name);
+  console.log(`[MAIN] 🌍 Nombre actualizado a: ${name}`);
 });
 
 // el que se encarga de decir "ya se agrego, recarga la libreria visual de la app"
@@ -403,3 +427,44 @@ function createEditWindow(game, index) {
     editWin = null;
   });
 }
+
+function openModalFirstOpen(isFirstOpen) {
+  if (configWin) {
+    configWin.focus();
+    return;
+  }
+
+  configWin = new BrowserWindow({
+    width: 500,
+    height: 700,
+    resizable: false,
+    minimizable: false,
+    maximizable: false,
+    modal: true,
+    autoHideMenuBar: true,
+    parent: BrowserWindow.getFocusedWindow(),
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
+  });
+
+  configWin.webContents.on("did-finish-load", () => {
+    const lang = getValue("lang") || "en";
+    configWin.webContents.send("set-language", lang);
+    configWin.webContents.send("isFirstOpen", { isFirstOpen });
+  });
+
+  configWin.loadFile(path.join(__dirname, "html/config.html"));
+
+  //configWin.webContents.openDevTools();
+
+  configWin.on("closed", () => {
+    configWin = null;
+  });
+}
+
+// 📡 Escuchar desde el renderer
+ipcMain.on("open-first-config", (event, { isFirstOpen }) => {
+  openModalFirstOpen(isFirstOpen);
+});

@@ -4,6 +4,8 @@ const path = require("path");
 const fs = require("fs");
 const { pathToFileURL } = require("url");
 
+let inNavbar = false; // 👈 Nueva bandera
+
 // ESTE ES EL MAS GRANDE DE MOMENTO. NO ROMPERLO.
 // SOLO DIOS Y YO SABIAMOS COMO SE HIZO ESTO EN SU MOMENTO
 // AHORA SOLO LO SABE DIOS.
@@ -121,44 +123,51 @@ function updateActiveItem() {
     const library = getLibrary();
     const activeGame = library[currentIndex];
 
-    const event = new CustomEvent("activeGameChanged", { detail: activeGame });
+    const event = new CustomEvent("activeGameChanged", {
+      detail: {
+        game: activeGame,
+        nav: inNavbar,
+      },
+    });
     window.dispatchEvent(event);
   }
 }
 
 function updateBackgroundForIndex(index) {
   const wrappers = getWrappers();
-  if (index < 0 || index >= wrappers.length) return;
+  const bgContainer = document.querySelector(".game-background");
+  const particlesDiv = document.querySelector(".particles");
+
+  if (index < 0 || index >= wrappers.length) {
+    if (bgContainer) bgContainer.style.backgroundImage = "none";
+    particlesDiv.style.display = "block";
+    particlesDiv.style.opacity = getValue("particles") ?? 0 ? 1 : 0;
+    return;
+  }
 
   const library = getLibrary();
   const game = library[index];
   if (!game) return;
 
-  const particlesDiv = document.querySelector(".particles");
   if (particlesDiv) {
-    let opacity;
-    let allways = 0;
-    let display = "none";
     if (game.id === "add-new") {
       particlesDiv.style.display = "block";
       particlesDiv.style.opacity = getValue("particles") ?? 0 ? 1 : 0;
     } else {
-      particlesDiv.style.display =
-        getValue("particles") && getValue("alwaysParticles") ? "block" : "none";
-      particlesDiv.style.opacity =
-        getValue("particles") && getValue("alwaysParticles") ? 1 : 0;
+      const show = getValue("particles") && getValue("alwaysParticles");
+      particlesDiv.style.display = show ? "block" : "none";
+      particlesDiv.style.opacity = show ? 1 : 0;
     }
   }
 
   const bgFileName = `${game.id}_background.png`;
   const bgPath = path.join(getBasePath(), "assets", bgFileName);
 
-  const bgContainer = document.querySelector(".game-background");
   if (fs.existsSync(bgPath)) {
     const bgUrl = pathToFileURL(bgPath).href;
     bgContainer.style.backgroundImage = `url('${bgUrl}')`;
   } else {
-    bgContainer.style.backgroundImage = `none`;
+    bgContainer.style.backgroundImage = "none";
   }
 }
 
@@ -191,16 +200,16 @@ window.addEventListener("keydown", (e) => {
 
   switch (e.key.toLowerCase()) {
     case "d":
-      if (currentIndex < wrappers.length - 1) {
-        currentIndex++;
+      if (currentIndex < wrappers.length - 1 && !inNavbar) {
+        currentIndex + 1;
         updateActiveItem();
         scrollToIndex(currentIndex);
         updateBackgroundForIndex(currentIndex);
       }
       break;
     case "a":
-      if (currentIndex > 0) {
-        currentIndex--;
+      if (currentIndex > 0 && !inNavbar) {
+        currentIndex - 1;
         updateActiveItem();
         scrollToIndex(currentIndex);
         updateBackgroundForIndex(currentIndex);
@@ -212,7 +221,7 @@ window.addEventListener("keydown", (e) => {
         const library = getLibrary();
         const game = library[currentIndex];
         if (!game) return;
-        if (game.id === "add-new") return;
+        if (game.id === "add-new" || inNavbar) return;
 
         const { ipcRenderer } = require("electron");
         ipcRenderer.send("open-edit-window", { game, index: currentIndex });
@@ -222,7 +231,7 @@ window.addEventListener("keydown", (e) => {
     case "enter":
     case " ":
       e.preventDefault();
-      if (currentIndex >= 0) {
+      if (currentIndex >= 0 && !inNavbar) {
         const wrappers = getWrappers();
         const library = getLibrary();
         const game = library[currentIndex];
@@ -238,6 +247,108 @@ window.addEventListener("keydown", (e) => {
             entry.dispatchEvent(new MouseEvent("click", { bubbles: true }));
           }
         }
+      }
+      break;
+  }
+});
+
+const navbarButtons = [document.getElementById("configBtn")]; // Puedes agregar más si tienes
+
+function updateNavbarSelection(index) {
+  navbarButtons.forEach((btn, i) => {
+    btn.classList.toggle("nav-active", i === index);
+  });
+}
+
+let navbarIndex = 0;
+
+window.addEventListener("keydown", (e) => {
+  const wrappers = getWrappers();
+  if (wrappers.length === 0) return;
+
+  switch (e.key.toLowerCase()) {
+    // ⬆️ SUBIR a navbar
+    case "w":
+      if (!inNavbar) {
+        inNavbar = true;
+        updateNavbarSelection(navbarIndex);
+        const library = getLibrary();
+        const game = library.length;
+        updateBackgroundForIndex(game);
+        updateActiveItem()
+        const wrappers = getWrappers();
+        wrappers.forEach((w) => w.classList.remove("active"));
+      }
+      break;
+
+    // ⬇️ BAJAR a galería
+    case "s":
+      if (inNavbar) {
+        inNavbar = false;
+        navbarButtons.forEach((btn) => btn.classList.remove("nav-active"));
+        updateActiveItem();
+        scrollToIndex(currentIndex);
+        updateBackgroundForIndex(currentIndex);
+      }
+      break;
+
+    // ⬅️➡️ Mover dentro de navbar o galería
+    case "d":
+      if (inNavbar) {
+        navbarIndex = (navbarIndex + 1) % navbarButtons.length;
+        updateNavbarSelection(navbarIndex);
+      } else {
+        if (currentIndex < wrappers.length - 1) {
+          currentIndex++;
+          updateActiveItem();
+          scrollToIndex(currentIndex);
+          updateBackgroundForIndex(currentIndex);
+        }
+      }
+      break;
+
+    case "a":
+      if (inNavbar) {
+        navbarIndex =
+          (navbarIndex - 1 + navbarButtons.length) % navbarButtons.length;
+        updateNavbarSelection(navbarIndex);
+      } else {
+        if (currentIndex > 0) {
+          currentIndex--;
+          updateActiveItem();
+          scrollToIndex(currentIndex);
+          updateBackgroundForIndex(currentIndex);
+        }
+      }
+      break;
+
+    // ✅ Enter o espacio → Ejecutar acción
+    case "enter":
+    case " ":
+      e.preventDefault();
+      if (inNavbar) {
+        navbarButtons[navbarIndex]?.click();
+      } else {
+        const library = getLibrary();
+        const game = library[currentIndex];
+        if (!game) return;
+
+        if (game.id === "add-new") {
+          ipcRenderer.send("open-add-new-window");
+        } else {
+          const entry = wrappers[currentIndex].querySelector(".entry");
+          if (entry) entry.click();
+        }
+      }
+      break;
+
+    // 📝 Editar (E) solo si estás en galería
+    case "e":
+      if (!inNavbar) {
+        const library = getLibrary();
+        const game = library[currentIndex];
+        if (!game || game.id === "add-new") return;
+        ipcRenderer.send("open-edit-window", { game, index: currentIndex });
       }
       break;
   }
