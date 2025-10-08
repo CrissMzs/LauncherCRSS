@@ -18,7 +18,7 @@ A customizable game launcher inspired by the PlayStation 5 interface, built with
 * 🌌 Configurable particle effects, (Not yet in front-end).
 * 🔄 Dynamic UI reload after edits — no restart required.
 * ⚙️ Configuration menu
-  ![LauncherCRSS Screenshot](./assets/screenshot4.png)
+  ![LauncherCRSS Screenshot](./assets/screenshot2.png)
   * Username
   * Language (En/Es)
 
@@ -37,7 +37,7 @@ A customizable game launcher inspired by the PlayStation 5 interface, built with
 ## **Particles are in beta** — this feature may have visual glitches.
 
 ![LauncherCRSS Screenshot](./assets/screenshot3.png)
-![LauncherCRSS Screenshot](./assets/screenshot2.png)
+![LauncherCRSS Screenshot](./assets/screenshot4.png)
 
 ### 📝 License
 
