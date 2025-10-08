@@ -77,6 +77,7 @@ form.addEventListener("submit", (e) => {
 });
 
 ipcRenderer.on("add-new-game-success", () => {
+  // TRadcciones aqui para errores
   form.reset();
   ipcRenderer.send("refresh-library");
   ipcRenderer.send("close-add-new-window");
