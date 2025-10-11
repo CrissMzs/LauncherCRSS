@@ -121,7 +121,7 @@ ipcMain.on("launch-game-request", (event, launchPath) => {
       // tenia planeado que se minimice a la cinta de herramientas como lo hace Spotify
       // a demas de que quiero leer el admin de tareas para contar el tiempo de juego, etc...
       // de momento con que se cierre, esta bien.
-      app.quit();
+      killMain();
     })
     .catch((error) => {
       // el then y catch es basicamente lo que ya vieron en poo, si hay error, te dice cual fue.

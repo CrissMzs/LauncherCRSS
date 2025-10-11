@@ -21,9 +21,10 @@ function initWatcher(app, launchMain, killMain) {
     return;
   }
 
-  tray.setToolTip("Exodo");
+  tray.setToolTip("Exodus");
 
   const menu = Menu.buildFromTemplate([
+    { label: "Exodus" },
     { label: "Open Launcher", click: launchMain },
     {
       label: "Close Launcher",
