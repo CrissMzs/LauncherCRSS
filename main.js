@@ -9,6 +9,8 @@ const fs = require("fs");
 const sharp = require("sharp");
 const { dialog } = require("electron");
 const { putFirst } = require("./services/reOrder");
+const { getAssetsPath } = require("./services/getPath");
+const { initWatcher, destroyWatcher } = require("./services/watcher");
 
 // main
 
@@ -28,17 +30,24 @@ try {
 }
 
 // crear constante que almacena main.html
-const createWindow = () => {
+function createWindow() {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    // Si ya existe → solo enfocarla y mostrarla
+    if (!mainWindow.isVisible()) mainWindow.show();
+    mainWindow.focus();
+    console.log("[MAIN] Focus MAIN.");
+    return;
+  }
+
+  // Si no existe, crear una nueva
   mainWindow = new BrowserWindow({
     fullscreen: true,
-
+    icon: path.join(getAssetsPath(), "ps5.png"),
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
     },
   });
-  // favor no descomentar
-  //mainWindow.webContents.openDevTools();
 
   mainWindow.loadFile("html/main.html");
 
@@ -46,18 +55,34 @@ const createWindow = () => {
     const lang = getValue("lang") || "en";
     mainWindow.webContents.send("set-language", lang);
   });
-};
+
+  mainWindow.on("closed", () => {
+    mainWindow = null;
+    console.log("[MAIN] Watcher listening.");
+  });
+}
+
+function killMain() {
+  if (mainWindow) {
+    mainWindow.close();
+    mainWindow = null;
+  }
+}
 
 // uso de la constante para crear la pagina apenas se inicie el app
 app.whenReady().then(() => {
   ensureAssetsFolder();
   createWindow();
+  initWatcher(app, createWindow, killMain);
 });
 
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    app.quit();
-  }
+app.on("window-all-closed", (event) => {
+  event.preventDefault();
+  console.log("[MAIN] MAIN CLOSE.");
+});
+
+app.on("will-quit", () => {
+  destroyWatcher();
 });
 
 app.on("activate", () => {
@@ -102,6 +127,11 @@ ipcMain.on("launch-game-request", (event, launchPath) => {
       // el then y catch es basicamente lo que ya vieron en poo, si hay error, te dice cual fue.
       console.error("MAIN: Error al lanzar el juego:", error);
     });
+});
+
+// Permite al renderer obtener la ruta absoluta del logo
+ipcMain.handle("get-logo-path", async () => {
+  return path.join(getAssetsPath(), "ps5.png");
 });
 
 // IPC PARA SELECTORES DE ARCHIVOS (FILE EXPLORER)
