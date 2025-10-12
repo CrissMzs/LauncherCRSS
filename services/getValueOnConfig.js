@@ -1,11 +1,11 @@
-const fs = require('fs');
-const path = require('path');
-const os = require('os');
-const { getBasePath } = require('./getPath');
+const fs = require("fs");
+const path = require("path");
+const os = require("os");
+const { getBasePath } = require("./getPath");
 
 // 📌 Ruta de AppData y archivo de configuración
 const configDir = getBasePath();
-const configPath = path.join(configDir, 'config.json');
+const configPath = path.join(configDir, "config.json");
 
 // 🧰 Asegura que el archivo existe
 function ensureConfigFile() {
@@ -14,14 +14,24 @@ function ensureConfigFile() {
   }
 
   if (!fs.existsSync(configPath)) {
-    ipcRenderer.send("open-first-config",{isFirstOpen: true});
+    ipcRenderer.send("open-first-config", { isFirstOpen: true });
     const defaultConfig = {
       username: "Guest",
       lang: "en",
       particles: true,
       alwaysParticles: false,
+      showControls: true,
+      keyUp: "w",
+      keyDown: "s",
+      keyLeft: "a",
+      keyRight: "d",
+      keyAction: " ",
     };
-    fs.writeFileSync(configPath, JSON.stringify(defaultConfig, null, 2), 'utf-8');
+    fs.writeFileSync(
+      configPath,
+      JSON.stringify(defaultConfig, null, 2),
+      "utf-8"
+    );
   }
 }
 
@@ -29,7 +39,7 @@ function ensureConfigFile() {
 function getValue(key) {
   ensureConfigFile();
   try {
-    const data = fs.readFileSync(configPath, 'utf-8');
+    const data = fs.readFileSync(configPath, "utf-8");
     const config = JSON.parse(data);
     return config[key] ?? null;
   } catch (err) {
@@ -40,11 +50,10 @@ function getValue(key) {
 
 function setValue(key, value) {
   ensureConfigFile();
-  const data = fs.readFileSync(configPath, 'utf-8');
+  const data = fs.readFileSync(configPath, "utf-8");
   const config = JSON.parse(data);
   config[key] = value;
-  fs.writeFileSync(configPath, JSON.stringify(config, null, 2), 'utf-8');
+  fs.writeFileSync(configPath, JSON.stringify(config, null, 2), "utf-8");
 }
-
 
 module.exports = { getValue, setValue };

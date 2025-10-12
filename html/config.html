@@ -2,50 +2,79 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Configuration</title>
-    <link rel="stylesheet" href="../css/modalNew.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuration</title>
+  <link rel="stylesheet" href="../css/modalNew.css">
 </head>
 
 <body>
-    <div class="ps5-modal">
-        <p class="formTitle" data-i18n="configTitle">Configuration</p>
+  <div class="ps5-modal">
+    <p class="formTitle" data-i18n="configTitle">Configuration</p>
 
-        <form class="form" id="config-form">
-            <div class="containForm">
-                <label>
-                    <span data-i18n="username">Username</span>
-                    <input type="text" id="username-input" placeholder="Your name..." required>
-                </label>
+    <form class="form" id="config-form">
+      <div class="containForm">
 
-                <label>
-                    <span data-i18n="language">Language</span>
-                    <select id="lang-select">
-                        <option value="en">English</option>
-                        <option value="es">Español</option>
-                    </select>
-                </label>
-            </div>
+        <!-- 👤 Username -->
+        <label>
+          <span data-i18n="username">Username</span>
+          <input type="text" id="username-input" placeholder="Your name..." required>
+        </label>
 
-            <div class="buttonsForm">
-                <button class="ps5-button" id="submit">
-                    <span class="button-content" data-i18n="reload">Save</span>
-                </button>
-                <a class="ps5-button" id="closeBtn">
-                    <span class="button-content" data-i18n="close">Close</span>
-                </a>
-            </div>
-        </form>
-    </div>
+        <!-- 🌍 Language -->
+        <label>
+          <span data-i18n="language">Language</span>
+          <select id="lang-select">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+          </select>
+        </label>
 
-    <script src="../scripts/config.js"></script>
-    <script>
-        const { initI18n } = require("../services/i18n.js");
-        ipcRenderer.on("set-language", (event, lang) => {
-            initI18n(lang);
-        });
-    </script>
+        <!-- 🎮 Controls configuration -->
+        <div class="controls-config">
+          <p data-i18n="keyboardControls">Keyboard Controls</p>
+          <div class="controls-grid">
+            <label>
+              <span data-i18n="keyUp">Up</span>
+              <input type="text" id="keyUp-input" class="key-input" maxlength="1" >
+            </label>
+
+            <label>
+              <span data-i18n="keyDown">Down</span>
+              <input type="text" id="keyDown-input" class="key-input" maxlength="1" >
+            </label>
+
+            <label>
+              <span data-i18n="keyLeft">Left</span>
+              <input type="text" id="keyLeft-input" class="key-input" maxlength="1" >
+            </label>
+
+            <label>
+              <span data-i18n="keyRight">Right</span>
+              <input type="text" id="keyRight-input" class="key-input" maxlength="1" >
+            </label>
+
+            <label>
+              <span data-i18n="keyAction">Action</span>
+              <input type="text" id="keyAction-input" class="key-input" maxlength="1" >
+            </label>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="buttonsForm">
+        <button class="ps5-button" id="submit">
+          <span class="button-content" data-i18n="save">Save</span>
+        </button>
+        <a class="ps5-button" id="closeBtn">
+          <span class="button-content" data-i18n="close">Close</span>
+        </a>
+      </div>
+    </form>
+  </div>
+
+  <script src="../scripts/config.js"></script>
 </body>
 
 </html>

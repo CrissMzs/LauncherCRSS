@@ -51,6 +51,8 @@ function createWindow() {
 
   mainWindow.loadFile("html/main.html");
 
+  //mainWindow.webContents.openDevTools();
+
   mainWindow.webContents.on("did-finish-load", () => {
     const lang = getValue("lang") || "en";
     mainWindow.webContents.send("set-language", lang);
@@ -121,7 +123,7 @@ ipcMain.on("launch-game-request", (event, launchPath) => {
       // tenia planeado que se minimice a la cinta de herramientas como lo hace Spotify
       // a demas de que quiero leer el admin de tareas para contar el tiempo de juego, etc...
       // de momento con que se cierre, esta bien.
-      app.quit();
+      killMain();
     })
     .catch((error) => {
       // el then y catch es basicamente lo que ya vieron en poo, si hay error, te dice cual fue.
@@ -266,6 +268,18 @@ ipcMain.on("set-language", (event, newLang) => {
 ipcMain.on("set-username", (event, name) => {
   setValue("username", name);
   console.log(`[MAIN] 🌍 Nombre actualizado a: ${name}`);
+});
+
+ipcMain.on("set-controls", (event, controls) => {
+  if (typeof controls !== "object") return;
+
+  for (const [key, value] of Object.entries(controls)) {
+    setValue(key, value);
+    console.log(`[CONFIG] 🎮 ${key} → ${value}`);
+  }
+
+  // Opcional: enviar confirmación de guardado
+  event.reply("controls-saved", { success: true });
 });
 
 // el que se encarga de decir "ya se agrego, recarga la libreria visual de la app"
@@ -466,7 +480,7 @@ function openModalFirstOpen(isFirstOpen) {
 
   configWin = new BrowserWindow({
     width: 500,
-    height: 350,
+    height: 604,
     resizable: false,
     minimizable: false,
     maximizable: false,
