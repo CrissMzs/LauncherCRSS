@@ -29,23 +29,23 @@ const defaultColors = {
 };
 
 const colorPickers = ["colorBG1", "colorBG2", "colorBG3", "colorBG4"];
+const shortcutInput = document.getElementById("shortcut-input"); 
 
-// 🧩 Cargar valores actuales
 ipcRenderer.on("isFirstOpen", (event, data) => {
   isFirstOpen = data.isFirstOpen;
 
   const currentUsername = getValue("username");
   const currentLang = getValue("lang");
+  const savedShortcut = getValue("shortcut");
 
   if (currentUsername) usernameInput.value = currentUsername;
   if (currentLang) langSelect.value = currentLang;
+  if (savedShortcut) shortcutInput.value = savedShortcut;
 
-  // 🎮 Rellenar las teclas con su valor actual
   Object.keys(keyInputs).forEach((key) => {
     let value = getValue(key);
 
     if (value) {
-      // Si es un espacio en blanco, mostrar como "SPACE"
       if (value === " ") value = "SPACE";
       keyInputs[key].value = value.toUpperCase();
     }
@@ -95,6 +95,7 @@ form.addEventListener("submit", (e) => {
 
   const username = usernameInput.value.trim();
   const lang = langSelect.value;
+    const shortcut = shortcutInput.value.trim();
 
   // Guardar usuario e idioma
   ipcRenderer.send("set-username", username);
@@ -116,6 +117,10 @@ form.addEventListener("submit", (e) => {
     const hex = input.value.replace("#", "");
     setValue(key, hex);
   });
+
+  if (shortcut && shortcut.includes("+")) {
+    setValue("shortcut", shortcut);
+  }
 
   // Enviar todo al main
   ipcRenderer.send("set-controls", controls);
@@ -143,3 +148,25 @@ resetColorsBtn.addEventListener("click", () => {
   });
 });
 
+let comboKeys = [];
+shortcutInput.addEventListener("focus", () => {
+  comboKeys = [];
+  shortcutInput.value = "";
+});
+
+shortcutInput.addEventListener("keydown", (e) => {
+  e.preventDefault();
+  const disallowed = ["Meta", "Super", "Shift", " "];
+  if (disallowed.includes(e.key)) return;
+
+  const key = e.key.length === 1 ? e.key.toUpperCase() : e.key;
+  if (!comboKeys.includes(key) && comboKeys.length < 2) {
+    comboKeys.push(key);
+  }
+
+  shortcutInput.value = comboKeys.join("+");
+
+  if (comboKeys.length === 2) {
+    shortcutInput.blur(); // salir del input al completar la combinación
+  }
+});

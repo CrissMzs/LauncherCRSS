@@ -25,6 +25,7 @@ function ensureConfigFile() {
       colorBG2: "3d3d3d",
       colorBG3: "242424",
       colorBG4: "111111",
+      shortcut: "Control+O",
       keyEdit: "e",
       keyUp: "w",
       keyDown: "s",

@@ -2,11 +2,12 @@
 const { Tray, Menu, globalShortcut } = require("electron");
 const path = require("path");
 const { getAssetsPath } = require("./getPath");
+const { getValue } = require("./getValueOnConfig"); // ✅ Importa tu helper
 
 let tray = null;
 
 /**
- * Inicializa el tray y el atajo Ctrl+O
+ * Inicializa el tray y el atajo global desde config.json
  * @param {Electron.App} app - instancia de la app
  * @param {Function} launchMain - función que abre/crea la ventana principal
  * @param {Function} killMain - función que cierra la ventana
@@ -37,10 +38,20 @@ function initWatcher(app, launchMain, killMain) {
 
   tray.setContextMenu(menu);
 
-  // 🔥 Registrar atajo global
+  // 🧩 Leer el atajo desde config.json
+  let shortcut = getValue("shortcut");
+  if (!shortcut || typeof shortcut !== "string" || shortcut.trim() === "") {
+    shortcut = "Control+O"; // valor por defecto
+  }
+
+  // 🔥 Registrar atajo global dinámico
   try {
-    globalShortcut.register("Control+O", launchMain);
-    console.log("[WATCHER] ✅ Tray creado y escuchando Ctrl+O");
+    const success = globalShortcut.register(shortcut, launchMain);
+    if (success) {
+      console.log(`[WATCHER] ✅ Tray creado y atajo registrado: ${shortcut}`);
+    } else {
+      console.warn(`[WATCHER] ⚠️ No se pudo registrar el atajo: ${shortcut}`);
+    }
   } catch (err) {
     console.error("[WATCHER] ❌ Error registrando atajo:", err);
   }

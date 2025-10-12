@@ -38,5 +38,6 @@
   "deleteConfirmationTitle": "Delete Confirmation",
   "cancelButton": "Cancel",
   "deleteButton": "Delete",
-  "colorEdit": "Background Colors"
+  "colorEdit": "Background Colors",
+  "shortcutTitle": "Shortcut (Restart required)"
 }

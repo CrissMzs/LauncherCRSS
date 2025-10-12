@@ -38,5 +38,6 @@
   "deleteConfirmationTitle": "Confirmar eliminación",
   "cancelButton": "Cancelar",
   "deleteButton": "Eliminar",
-  "colorEdit": "Colores de Background"
+  "colorEdit": "Colores de Background",
+  "shortcutTitle": "Atajo (Reinicio necesario)"
 }
