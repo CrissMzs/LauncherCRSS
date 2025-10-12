@@ -3,6 +3,7 @@ const { getBasePath } = require("../services/getPath");
 const path = require("path");
 const fs = require("fs");
 const { pathToFileURL } = require("url");
+const { getTranslate } = require("../services/getTranslate");
 
 let inNavbar = false; // 👈 Nueva bandera
 
@@ -68,7 +69,11 @@ window.addEventListener("DOMContentLoaded", () => {
 
       const title = document.createElement("p");
       title.classList.add("game-title");
-      title.textContent = game.title || "";
+      if (game.id === "add-new") {
+        title.textContent = "";
+      } else {
+        title.textContent = game.title || "";
+      }
 
       entryWrapper.appendChild(entry);
       entryWrapper.appendChild(title);
@@ -127,6 +132,7 @@ function updateActiveItem() {
       detail: {
         game: activeGame,
         nav: inNavbar,
+        currentIndex,
       },
     });
     window.dispatchEvent(event);
@@ -141,7 +147,7 @@ function updateBackgroundForIndex(index) {
   if (index < 0 || index >= wrappers.length) {
     if (bgContainer) bgContainer.style.backgroundImage = "none";
     particlesDiv.style.display = "block";
-    particlesDiv.style.opacity = getValue("particles") ?? 0 ? 1 : 0;
+    particlesDiv.style.opacity = (getValue("particles") ?? 0) ? 1 : 0;
     return;
   }
 
@@ -152,7 +158,7 @@ function updateBackgroundForIndex(index) {
   if (particlesDiv) {
     if (game.id === "add-new") {
       particlesDiv.style.display = "block";
-      particlesDiv.style.opacity = getValue("particles") ?? 0 ? 1 : 0;
+      particlesDiv.style.opacity = (getValue("particles") ?? 0) ? 1 : 0;
     } else {
       const show = getValue("particles") && getValue("alwaysParticles");
       particlesDiv.style.display = show ? "block" : "none";
@@ -194,141 +200,110 @@ function scrollToIndex(index) {
   });
 }
 
-window.addEventListener("keydown", (e) => {
-  const wrappers = getWrappers();
-  if (wrappers.length === 0) return;
-
-  switch (e.key.toLowerCase()) {
-    case "d":
-      if (currentIndex < wrappers.length - 1 && !inNavbar) {
-        currentIndex + 1;
-        updateActiveItem();
-        scrollToIndex(currentIndex);
-        updateBackgroundForIndex(currentIndex);
-      }
-      break;
-    case "a":
-      if (currentIndex > 0 && !inNavbar) {
-        currentIndex - 1;
-        updateActiveItem();
-        scrollToIndex(currentIndex);
-        updateBackgroundForIndex(currentIndex);
-      }
-      break;
-
-    case "e":
-      {
-        const library = getLibrary();
-        const game = library[currentIndex];
-        if (!game) return;
-        if (game.id === "add-new" || inNavbar) return;
-
-        const { ipcRenderer } = require("electron");
-        ipcRenderer.send("open-edit-window", { game, index: currentIndex });
-      }
-      break;
-
-    case "enter":
-    case " ":
-      e.preventDefault();
-      if (currentIndex >= 0 && !inNavbar) {
-        const wrappers = getWrappers();
-        const library = getLibrary();
-        const game = library[currentIndex];
-        if (!game) return;
-
-        if (game.id === "add-new") {
-          const { ipcRenderer } = require("electron");
-
-          ipcRenderer.send("open-add-new-window");
-        } else {
-          const entry = wrappers[currentIndex].querySelector(".entry");
-          if (entry) {
-            entry.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-          }
-        }
-      }
-      break;
-  }
-});
-
 const navbarButtons = [document.getElementById("configBtn")]; // Puedes agregar más si tienes
 
 function updateNavbarSelection(index) {
   navbarButtons.forEach((btn, i) => {
-    btn.classList.toggle("nav-active", i === index);
+    btn.classList.toggle("focusConfig", i === index);
   });
 }
 
+let currentSection = "gallery"; // "navbar", "gallery", "controls"
 let navbarIndex = 0;
+let controlIndex = 0;
+
+// 🕹️ Cargar teclas configuradas por el usuario
+const keyUp = (getValue("keyUp") || "w").toLowerCase();
+const keyDown = (getValue("keyDown") || "s").toLowerCase();
+const keyLeft = (getValue("keyLeft") || "a").toLowerCase();
+const keyRight = (getValue("keyRight") || "d").toLowerCase();
+const keyAction = (getValue("keyAction") || "space").toLowerCase();
 
 window.addEventListener("keydown", (e) => {
+  const key = e.key.toLowerCase();
   const wrappers = getWrappers();
   if (wrappers.length === 0) return;
 
-  switch (e.key.toLowerCase()) {
-    // ⬆️ SUBIR a navbar
-    case "w":
-      if (!inNavbar) {
+  switch (true) {
+    // ⬆️ SUBIR de sección
+    case key === keyUp:
+      if (currentSection === "controls") {
+        currentSection = "gallery";
+        resetControlsFocus();
+        updateActiveItem();
+        updateBackgroundForIndex(currentIndex);
+      } else if (currentSection === "gallery") {
+        currentSection = "navbar";
         inNavbar = true;
-        updateNavbarSelection(navbarIndex);
         const library = getLibrary();
         const game = library.length;
         updateBackgroundForIndex(game);
-        updateActiveItem()
-        const wrappers = getWrappers();
+        updateActiveItem();
+        updateNavbarSelection(navbarIndex);
         wrappers.forEach((w) => w.classList.remove("active"));
       }
       break;
 
-    // ⬇️ BAJAR a galería
-    case "s":
-      if (inNavbar) {
+    // ⬇️ BAJAR de sección
+    case key === keyDown:
+      if (currentSection === "navbar") {
+        currentSection = "gallery";
         inNavbar = false;
-        navbarButtons.forEach((btn) => btn.classList.remove("nav-active"));
+        navbarButtons.forEach((btn) => btn.classList.remove("focusConfig"));
         updateActiveItem();
         scrollToIndex(currentIndex);
         updateBackgroundForIndex(currentIndex);
+      } else if (currentSection === "gallery") {
+        const library = getLibrary();
+        const game = library[currentIndex];
+        if (game.id == "add-new") {
+          return;
+        }
+        currentSection = "controls";
+        focusControls();
       }
       break;
 
-    // ⬅️➡️ Mover dentro de navbar o galería
-    case "d":
-      if (inNavbar) {
+    // ⬅️➡️ Navegación lateral
+    case key === keyRight:
+      if (currentSection === "navbar") {
         navbarIndex = (navbarIndex + 1) % navbarButtons.length;
         updateNavbarSelection(navbarIndex);
-      } else {
+      } else if (currentSection === "gallery") {
         if (currentIndex < wrappers.length - 1) {
           currentIndex++;
           updateActiveItem();
           scrollToIndex(currentIndex);
           updateBackgroundForIndex(currentIndex);
         }
+      } else if (currentSection === "controls") {
+        moveControls(1);
       }
       break;
 
-    case "a":
-      if (inNavbar) {
+    case key === keyLeft:
+      if (currentSection === "navbar") {
         navbarIndex =
           (navbarIndex - 1 + navbarButtons.length) % navbarButtons.length;
         updateNavbarSelection(navbarIndex);
-      } else {
+      } else if (currentSection === "gallery") {
         if (currentIndex > 0) {
           currentIndex--;
           updateActiveItem();
           scrollToIndex(currentIndex);
           updateBackgroundForIndex(currentIndex);
         }
+      } else if (currentSection === "controls") {
+        moveControls(-1);
       }
       break;
 
-    // ✅ Enter o espacio → Ejecutar acción
-    case "enter":
-    case " ":
+    // Acción principal
+    case keyAction.includes(key):
       e.preventDefault();
-      if (inNavbar) {
+      if (currentSection === "navbar") {
         navbarButtons[navbarIndex]?.click();
-      } else {
+      } else if (currentSection === "gallery") {
         const library = getLibrary();
         const game = library[currentIndex];
         if (!game) return;
@@ -339,12 +314,17 @@ window.addEventListener("keydown", (e) => {
           const entry = wrappers[currentIndex].querySelector(".entry");
           if (entry) entry.click();
         }
+      } else if (currentSection === "controls") {
+        const buttons = document.querySelectorAll(
+          "#game-content .btnsGame button"
+        );
+        if (buttons[controlIndex]) buttons[controlIndex].click();
       }
       break;
 
-    // 📝 Editar (E) solo si estás en galería
-    case "e":
-      if (!inNavbar) {
+    // 📝 Editar (E) → no depende de configuración
+    case key === "e":
+      if (currentSection === "gallery") {
         const library = getLibrary();
         const game = library[currentIndex];
         if (!game || game.id === "add-new") return;
@@ -353,6 +333,29 @@ window.addEventListener("keydown", (e) => {
       break;
   }
 });
+
+function focusControls() {
+  const buttons = document.querySelectorAll("#game-content .btnsGame button");
+  if (buttons.length === 0) return;
+  controlIndex = 0;
+  buttons.forEach((b, i) => {
+    b.classList.toggle("focused", i === 0);
+  });
+}
+
+function moveControls(dir) {
+  const buttons = document.querySelectorAll("#game-content .btnsGame button");
+  if (buttons.length === 0) return;
+  controlIndex = (controlIndex + dir + buttons.length) % buttons.length;
+  buttons.forEach((b, i) => {
+    b.classList.toggle("focused", i === controlIndex);
+  });
+}
+
+function resetControlsFocus() {
+  const buttons = document.querySelectorAll("#game-content .btnsGame button");
+  buttons.forEach((b) => b.classList.remove("focused"));
+}
 
 ipcRenderer.on("refresh-library", () => {
   console.log("[Renderer] Refrescando librería...");

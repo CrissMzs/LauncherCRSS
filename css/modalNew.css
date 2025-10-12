@@ -139,3 +139,39 @@ body {
   background: rgba(40, 40, 40, 0.95);
   color: white;
 }
+
+/* 🕹️ Sección de configuración de controles */
+.controls-config {
+  margin-top: 20px;
+  padding-top: 10px;
+}
+
+.controls-config h1 {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+  opacity: 0.85;
+}
+
+/* Rejilla estilo PS5 */
+.controls-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 40px;
+}
+
+.key-input {
+  text-align: center;
+  width: 80px !important;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.key-input:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+}

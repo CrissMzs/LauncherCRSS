@@ -1,11 +1,14 @@
 .gallery {
   display: flex;
+  flex: 1;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  padding: 2rem 20px 2rem 60px; 
+  padding: 2rem 20px 2rem 60px;
   margin: 60px 0 0 0;
-  scrollbar-width: none;
-
+  scroll-padding-left: 60px; /* hace que el scroll respete el inicio */
+  margin: 60px 0 0 0; /* quita el margin-left */
+  height: 300px;
+  max-height: 300px;
 }
 
 .gallery::-webkit-scrollbar {
@@ -14,17 +17,20 @@
 
 .entry-wrapper {
   flex: 0 0 auto;
-  width: 150px; 
-  margin-right: 1rem; 
-  scroll-snap-align: start; 
+  width: 150px;
+  margin-right: 1rem;
+  scroll-snap-align: start;
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, width 0s;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    width 0.2s ease;
 }
 
 .entry {
-    margin-left: 120px;
+  margin-left: 120px;
   position: relative;
   width: 150px;
   height: 150px;
@@ -44,7 +50,10 @@
   height: 100%;
   background-size: cover;
   background-position: center;
-  transition: filter 0.3s ease, transform 0.3s ease;
+  transition:
+    filter 0.3s ease,
+    transform 0.3s ease
+    width 0.2s ease;
 }
 
 .entry-overlay {
@@ -59,13 +68,16 @@
 }
 
 .game-title {
+  position: absolute;
+  font-size: 23px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  bottom: 90px;
+  left: 260px; /* 👈 mueve desde el borde izquierdo del wrapper */
+  width: max-content;
   opacity: 0;
-  margin-top: 0.5rem;
-  font-size: 1rem;
   color: #fff;
-  text-align: center;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
-  transition: opacity 0.3s ease;
+  white-space: nowrap; /* evita que salte de línea */
 }
 
 .entry-wrapper:hover .game-title {
@@ -82,38 +94,39 @@
   color: white;
 }
 
-.entry-wrapper:hover .entry,
+.active {
+  transition: 
+    width 0.2s ease;
+}
+
 .entry-wrapper.active .entry {
-    min-width: 180px;
+  min-width: 180px;
+  max-width: 180px;
   height: 280px;
-  border-radius: 10px; 
+  border-radius: 10px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   z-index: 5;
 }
 
-.entry-wrapper:hover,
 .entry-wrapper.active {
-  width: 180px; 
+  width: 180px;
+  position: relative;
 }
 
-.entry-wrapper.active .entry-overlay,
-.entry-wrapper:hover .entry-overlay {
+.entry-wrapper.active .entry-overlay {
   opacity: 0;
   pointer-events: none;
 }
 
-.entry-wrapper.active .entry-bg,
-.entry-wrapper:hover .entry-bg {
+.entry-wrapper.active .entry-bg {
   filter: none;
   transform: scale(1.05);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-.entry-wrapper:hover .game-title,
 .entry-wrapper.active .game-title {
-  opacity: 0;
+  opacity: 1;
 }
-
 
 .game-background {
   position: fixed;
@@ -124,9 +137,11 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  filter: blur(5px) brightness(0.6); 
+  filter: blur(5px) brightness(0.6);
   transform: scale(1.1);
-  transition: background-image 0.3s ease, opacity 0.3s ease;
+  transition:
+    background-image 0.3s ease,
+    opacity 0.3s ease;
   z-index: 1;
 }
 
@@ -137,8 +152,8 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 1; 
-  background: 
+  z-index: 1;
+  background:
     linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 15%),
     linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 50%);
 }
@@ -153,7 +168,6 @@
   --gradient-color-4: #111111;
   z-index: 9997;
 }
-
 
 .particles {
   opacity: 0;
@@ -174,6 +188,7 @@
 .navbar {
   opacity: 0;
   position: fixed;
+  margin: 15px 20px;
   top: 0;
   left: 0;
   right: 0;
@@ -194,52 +209,127 @@
 }
 
 .navbar-right {
+  display: flex;
+  gap: 30px;
   font-weight: 400;
 }
 
 body {
-      margin: 0;
+  margin: 0;
   background-color: #141414;
   margin: 0;
 }
 
-.navbar{
-    min-height: 4vh;
-    font-size: 30px;
-    color: #fff;
+.navbar {
+  min-height: 4vh;
+  font-size: 30px;
+  color: #fff;
 }
-.content{
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+.content {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .gameContent {
+  flex: 1;
   display: flex;
   justify-content: left;
-  align-items: end;
+  align-items: start;
   padding: 2rem;
   min-height: 200px;
+  margin-left: 60px;
 }
 
 .game-logo-container {
   display: flex;
   justify-content: left;
-  align-items: end;
+  align-items: center;
 }
 
 .game-logo {
   max-height: 300px;
+  max-width: 600px;
   object-fit: contain;
   filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.5));
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
 }
 
-.game-logo:hover {
+.btnsGame {
+  position: absolute;
+  display: flex;
+  gap: 20px;
+  bottom: 150px;
+}
+
+.btnsGame button.focused {
+  color: #000;
+  background-color: #fff;
+}
+
+.playBtn {
+  all: unset;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 20px;
+  padding: 15px 100px;
+  background-color: #ffffff13;
+  color: #fff;
+  border-radius: 30px;
+  transition: all 0.2s;
+}
+
+.optionBtn {
+  all: unset;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 20px;
+  padding: 15px 19px;
+  background-color: #ffffff13;
+  color: #fff;
+  border-radius: 30px;
+  transition: all 0.2s;
+}
+
+.controls {
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  justify-content: end;
+  margin: 10px 20px;
+  color: #fff;
+  opacity: 0.3;
+}
+
+.controls-grid {
+  display: flex;
+  gap: 50px;
+}
+
+.control-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.key-box {
+  background-color: #fff;
+  font-weight: 600;
+  border-radius: 2px;
+  color: #000;
+  padding: 5px 8px;
+  transition: all 0.1s;
+}
+
+.key-box.active {
+  border-color: #fff;
+  transform: scale(1.2);
+}
+
+/* .game-logo:hover {
   transform: scale(1.05);
   opacity: 0.9;
-}
+} */
 
 #loading-spinner {
   position: fixed;
@@ -357,7 +447,7 @@ body {
 
 .loader::after,
 .loader::before {
-  content: '';
+  content: "";
   box-sizing: border-box;
   width: 120px;
   height: 120px;
@@ -367,7 +457,7 @@ body {
   left: 0;
   top: 0;
   transform: scale(0); /* ✅ fuerza estado inicial reducido */
-  opacity: 0;          /* ✅ evita que se vea el “círculo completo” antes */
+  opacity: 0; /* ✅ evita que se vea el “círculo completo” antes */
   animation: animloader 2s linear infinite;
   animation-fill-mode: both; /* ✅ mantiene estado inicial y final */
   animation-delay: -0.4s;
@@ -401,7 +491,7 @@ body {
 }
 
 #configBtn {
-  all: unset; 
+  all: unset;
   position: relative;
   margin-left: 20px;
   display: flex;
@@ -409,22 +499,24 @@ body {
   justify-content: center;
   font-size: 1.2rem;
   color: white;
-  background: transparent;
+  background-color: #ffffff13;
+  fill: #fff;
   border-radius: 50%;
   width: 40px;
   height: 40px;
   cursor: pointer;
   overflow: visible;
-  transition: transform 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 /* Quitar outline al enfocarse con teclado */
-#configBtn:focus {
+#configBtn.focusConfig {
   outline: none;
+  fill: #000;
+  background-color: #fff;
 }
 
-/* ✨ Glow giratorio en el borde */
-#configBtn::before {
+/* #configBtn::before {
   content: "";
   position: absolute;
   inset: -3px;
@@ -438,8 +530,8 @@ body {
     rgba(255, 255, 255, 0.9) 180deg 240deg,
     rgba(255, 255, 255, 0) 240deg 360deg
   );
-  -webkit-mask: 
-    linear-gradient(#000 0 0) content-box, 
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
@@ -449,22 +541,25 @@ body {
   z-index: 0;
 }
 
-/* ✨ Solo visible cuando está activa por navegación o hover */
 #configBtn:hover::before,
 #configBtn.nav-active::before {
   opacity: 1;
 }
 
-/* Escala y glow al activarse con teclado */
 #configBtn.nav-active {
   transform: scale(1.1);
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-}
+} */
 
 #configBtn p {
   z-index: 1;
   pointer-events: none;
   user-select: none;
+}
+
+.svgConfig {
+  width: 25px;
+  height: 25px;
 }
 
 @keyframes spinBorder {
@@ -475,4 +570,3 @@ body {
     transform: rotate(360deg);
   }
 }
-

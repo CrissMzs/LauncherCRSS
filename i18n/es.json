@@ -17,5 +17,17 @@
   "select": "Seleccionar",
   "configTitle": "Configuracion",
   "language": "Idioma",
-  "username": "Nombre de usuario"
+  "username": "Nombre de usuario",
+  "play": "Jugar",
+  "keyUp": "Arriba",
+  "keyDown": "Abajo",
+  "keyLeft": "Izquierda",
+  "keyRight": "Derecha",
+  "keyAction": "Acción",
+  "keyboardControls": "Controles Teclado",
+  "space": "ESPACIO",
+  "arrowup": "↑",
+  "arrowdown": "↓",
+  "arrowleft": "←",
+  "arrowright": "→"
 }
