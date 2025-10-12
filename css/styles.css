@@ -80,9 +80,7 @@
   white-space: nowrap; /* evita que salte de línea */
 }
 
-.entry-wrapper:hover .game-title {
-  opacity: 1;
-}
+
 
 .special-entry {
   display: flex;
@@ -309,7 +307,7 @@ body {
 .control-item {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 10px;
 }
 
 .key-box {

@@ -1,4 +1,5 @@
 const { ipcRenderer } = require("electron");
+const { getTranslate } = require("../services/getTranslate");
 
 const form = document.getElementById("edit-form");
 const messageDiv = document.getElementById("message");
@@ -12,6 +13,9 @@ const selectLogoBtn = document.getElementById("select-logo");
 const iconPathInput = document.getElementById("icon-path");
 const bgPathInput = document.getElementById("bg-path");
 const logoPathInput = document.getElementById("logo-path");
+
+const closeBtn = document.getElementById("closeBtn");
+const deleteBtn = document.getElementById("deleteBtn");
 
 let currentIndex = null;
 let id = null;
@@ -33,25 +37,25 @@ ipcRenderer.on("edit-game-data", (event, { game, index }) => {
 
 // 📌 Selección de archivos
 function handleBrowse() {
-  ipcRenderer.invoke("select-launcher-path").then(filePath => {
+  ipcRenderer.invoke("select-launcher-path").then((filePath) => {
     if (filePath) gameUrlInput.value = filePath;
   });
 }
 
 function handleSelectIcon() {
-  ipcRenderer.invoke("select-image-file").then(filePath => {
+  ipcRenderer.invoke("select-image-file").then((filePath) => {
     if (filePath) iconPathInput.value = filePath;
   });
 }
 
 function handleSelectBg() {
-  ipcRenderer.invoke("select-image-file").then(filePath => {
+  ipcRenderer.invoke("select-image-file").then((filePath) => {
     if (filePath) bgPathInput.value = filePath;
   });
 }
 
 function handleSelectLogo() {
-  ipcRenderer.invoke("select-image-file").then(filePath => {
+  ipcRenderer.invoke("select-image-file").then((filePath) => {
     if (filePath) logoPathInput.value = filePath;
   });
 }
@@ -99,7 +103,35 @@ function showMessage(text, type) {
   messageDiv.className = "message " + type;
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener("DOMContentLoaded", () => {
   // Avisamos al proceso principal que ya puede mandarnos los datos
-  ipcRenderer.send('edit-game-window-ready');
+  ipcRenderer.send("edit-game-window-ready");
+});
+
+closeBtn.addEventListener("click", () => {
+  window.close();
+});
+
+deleteBtn.addEventListener("click", () => {
+  if (!id) return showMessage("❌ No se puede borrar: ID no definido", "error");
+
+  const title = getTranslate("deleteConfirmationTitle");
+  const message = getTranslate("deleteConfirmation");
+
+  ipcRenderer
+    .invoke("show-confirm-dialog", { title, message })
+    .then((confirmed) => {
+      if (!confirmed) return;
+      ipcRenderer.send("delete-game-entry", id);
+    });
+});
+
+ipcRenderer.on("delete-game-success", () => {
+  showMessage("🗑️ Juego eliminado correctamente", "success");
+  ipcRenderer.send("refresh-library");
+  window.close();
+});
+
+ipcRenderer.on("delete-game-error", (event, errorMsg) => {
+  showMessage("❌ Error al eliminar: " + errorMsg, "error");
 });

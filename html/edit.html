@@ -1,65 +1,86 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Editar Juego</title>
-  <link rel="stylesheet" href="../css/editModal.css">
+  <link rel="stylesheet" href="../css/modalNew.css" />
 </head>
+
 <body>
-  <h1>Editar juego</h1>
-  <form id="edit-form">
-    <!-- <label>
-      ID único:
-      <input type="text" id="game-id" required />
-    </label> -->
+  <div class="ps5-modal">
+    <p class="formTitle" data-i18n="editModalTitle">Editar juego</p>
 
-    <label>
-      Título:
-      <input type="text" id="game-title" required />
-    </label>
+    <form id="edit-form" class="form">
+      <div class="containForm">
+        <label>
+          <span data-i18n="title">Título</span>
+          <input type="text" id="game-title" placeholder="Nombre del juego..." required />
+        </label>
 
-    <label>
-      Tipo:
-      <input type="text" id="game-type" />
-    </label>
+        <label>
+          <span data-i18n="genere">Tipo</span>
+          <input type="text" id="game-type" placeholder="Categoría o género..." />
+        </label>
 
-    <label>
-      Ruta o URL de lanzamiento:
-      <div class="input-with-button">
-        <input type="text" id="game-url" placeholder="steam://... o ruta a .exe / .lnk" />
-        <button type="button" id="browse-btn">Seleccionar...</button>
+        <label>
+          <span data-i18n="shortcut">Ruta o URL</span>
+          <div class="input-with-button">
+            <input type="text" id="game-url" placeholder="steam:// o ruta a .exe / .lnk" />
+            <button data-i18n="select" type="button" id="browse-btn" class="ps5-button">Seleccionar...</button>
+          </div>
+        </label>
+
+        <label>
+          <span data-i18n="cover">Icono</span>
+          <div class="input-with-button">
+            <input type="text" id="icon-path" readonly placeholder="Selecciona imagen..." />
+            <button data-i18n="select" type="button" id="select-icon" class="ps5-button">Elegir</button>
+          </div>
+        </label>
+
+        <label>
+          <span data-i18n="bg">Fondo</span>
+          <div class="input-with-button">
+            <input type="text" id="bg-path" readonly placeholder="Selecciona imagen..." />
+            <button data-i18n="select" type="button" id="select-bg" class="ps5-button">Elegir</button>
+          </div>
+        </label>
+
+        <label>
+          <span data-i18n="logo">Logo</span>
+          <div class="input-with-button">
+            <input type="text" id="logo-path" readonly placeholder="Selecciona imagen..." />
+            <button data-i18n="select" type="button" id="select-logo" class="ps5-button">Elegir</button>
+          </div>
+        </label>
       </div>
-    </label>
 
-    <label>
-      Icono:
-      <div class="input-with-button">
-        <input type="text" id="icon-path" readonly placeholder="Selecciona imagen..." />
-        <button type="button" id="select-icon">Elegir</button>
+      <div class="buttonsForm">
+        <button type="submit" class="ps5-button">
+          <span class="button-content" data-i18n="save">Guardar</span>
+        </button>
+        <a class="ps5-button" id="closeBtn">
+          <span class="button-content" data-i18n="close">Cerrar</span>
+        </a>
+        <a class="ps5-red-button" id="deleteBtn">
+          <span class="button-content" data-i18n="delete">Delete</span>
+        </a>
       </div>
-    </label>
 
-    <label>
-      Fondo:
-      <div class="input-with-button">
-        <input type="text" id="bg-path" readonly placeholder="Selecciona imagen..." />
-        <button type="button" id="select-bg">Elegir</button>
-      </div>
-    </label>
-
-    <label>
-      Logo:
-      <div class="input-with-button">
-        <input type="text" id="logo-path" readonly placeholder="Selecciona imagen..." />
-        <button type="button" id="select-logo">Elegir</button>
-      </div>
-    </label>
-
-    <button type="submit">Guardar cambios</button>
-    <div id="message" class="message"></div>
-  </form>
+      <div id="message" class="message"></div>
+    </form>
+  </div>
 
   <script src="../scripts/modalEdit.js"></script>
+  <script>
+        const { initI18n } = require("../services/i18n.js");
+
+        ipcRenderer.on("set-language", (event, lang) => {
+            initI18n(lang);
+        });
+    </script>
 </body>
+
 </html>

@@ -14,6 +14,7 @@ async function renderControls() {
   const keyLeft = (getValue("keyLeft") || "a").toLowerCase();
   const keyRight = (getValue("keyRight") || "d").toLowerCase();
   const keyAction = (getValue("keyAction") || " ").toLowerCase();
+  const keyEdit = (getValue("keyEdit") || " ").toLowerCase();
 
   // 🔹 Lista de acciones traducidas
   const controlList = [
@@ -21,6 +22,7 @@ async function renderControls() {
     { key: formatKey(keyDown), label: getTranslate("keyDown") },
     { key: formatKey(keyLeft), label: getTranslate("keyLeft") },
     { key: formatKey(keyRight), label: getTranslate("keyRight") },
+    { key: formatKey(keyEdit), label: getTranslate("keyEdit") },
     { key: formatKey(keyAction), label: getTranslate("keyAction") },
   ];
 
@@ -42,6 +44,7 @@ async function renderControls() {
 
   window.addEventListener("keydown", (e) => {
     const key = formatKeyLabel(e.key);
+    if(key==keyEdit||key==keyAction||key==getTranslate("space").toLowerCase()){return}
     const item = controls.querySelector(`.control-item[data-key="${key}"]`);
     if (item) item.querySelector(".key-box").classList.add("active");
   });
@@ -54,7 +57,7 @@ async function renderControls() {
 }
 
 function formatKeyLabel(key) {
-  const k = key.toLowerCase().trim();
+  const k = key.toLowerCase();
 
   switch (k) {
     case " ":

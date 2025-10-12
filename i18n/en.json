@@ -5,9 +5,12 @@
   "edit_game": "Edit Game",
   "save": "Save",
   "reload": "Reload",
+  "restart": "Restart",
   "close": "Close",
   "cancel": "Cancel",
+  "delete": "Delete",
   "id": "ID:",
+  "editModalTitle": "Edit Game",
   "title": "Title",
   "genere": "Genere",
   "shortcut": "Shortcut",
@@ -19,6 +22,7 @@
   "language": "Language",
   "username": "Username",
   "play": "Play",
+  "keyEdit": "Edit",
   "keyUp": "Up",
   "keyDown": "Down",
   "keyLeft": "Left",
@@ -29,5 +33,10 @@
   "arrowup": "↑",
   "arrowdown": "↓",
   "arrowleft": "←",
-  "arrowright": "→"
+  "arrowright": "→",
+  "deleteConfirmation": "Are you sure you want to delete this game?",
+  "deleteConfirmationTitle": "Delete Confirmation",
+  "cancelButton": "Cancel",
+  "deleteButton": "Delete",
+  "colorEdit": "Background Colors"
 }

@@ -90,6 +90,39 @@ body {
   transform: scale(0.98);
 }
 
+.ps5-red-button {
+  align-self: flex-end;
+  background: #b905051a;
+  border: 1px solid #da090933;
+  color: #fff;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.ps5-red-button:hover {
+  background: #cc070733;
+}
+
+.ps5-red-button:active {
+  transform: scale(0.98);
+}
+
+.btnRestart{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.padding50{
+  padding-right: 50px;
+  padding-left: 50px;
+}
+
 .form{
     height: 100%;
     display: flex;
@@ -174,4 +207,44 @@ body {
 .key-input:focus {
   border-color: rgba(255, 255, 255, 0.5);
   background: rgba(255, 255, 255, 0.15);
+}
+
+/* 🎨 Sección de colores de fondo */
+.color-section {
+  margin-top: 25px;
+  padding-top: 10px;
+}
+
+.color-section h1 {
+  font-size: 1rem;
+  font-weight: 500;
+  opacity: 0.85;
+  margin-bottom: 15px;
+}
+
+/* Rejilla de color pickers */
+.color-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 40px;
+}
+
+.color-grid label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.color-picker {
+  width: 60px;
+  height: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  background: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.color-picker:hover {
+  transform: scale(1.1);
 }

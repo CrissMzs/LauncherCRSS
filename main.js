@@ -254,6 +254,80 @@ ipcMain.on("add-new-game-entry", async (event, gameData) => {
   }
 });
 
+ipcMain.handle("show-confirm-dialog", async (event, { title, message }) => {
+  try {
+    const { response } = await dialog.showMessageBox({
+      type: "question",
+      title: title || "Confirm",
+      message: message || "",
+      buttons: ["Cancel", "OK"],
+      defaultId: 1, // OK es predeterminado
+      cancelId: 0,
+      normalizeAccessKeys: true,
+    });
+
+    // Si el usuario presiona OK (índice 1)
+    return response === 1;
+  } catch (err) {
+    console.error("[MAIN] ❌ Error en show-confirm-dialog:", err);
+    return false;
+  }
+});
+
+ipcMain.on("refresh-gradient", (event, colors) => {
+  const win = BrowserWindow.getAllWindows().find(w => w.title === "Exodus" || w.isMainWindow);
+  if (!win) return;
+
+  win.webContents.send("update-gradient", colors);
+});
+
+ipcMain.on("delete-game-entry", async (event, gameId) => {
+  try {
+    const basePath = getBasePath();
+    const assetsPath = path.join(basePath, "assets");
+    const libraryPath = path.join(basePath, "library.json");
+
+    if (!fs.existsSync(libraryPath)) {
+      throw new Error("library.json no encontrado");
+    }
+
+    const rawLibrary = fs.readFileSync(libraryPath, "utf8");
+    const library = JSON.parse(rawLibrary);
+
+    // Buscar la entrada por ID
+    const index = library.findIndex((item) => item.id === gameId);
+    if (index === -1) {
+      throw new Error(`No se encontró el juego con ID "${gameId}"`);
+    }
+
+    // Eliminar la entrada
+    library.splice(index, 1);
+
+    // Guardar cambios
+    fs.writeFileSync(libraryPath, JSON.stringify(library, null, 2), "utf8");
+
+    // Eliminar imágenes asociadas
+    const imageFiles = [
+      path.join(assetsPath, `${gameId}_ico.png`),
+      path.join(assetsPath, `${gameId}_background.png`),
+      path.join(assetsPath, `${gameId}_logo.png`),
+    ];
+
+    for (const file of imageFiles) {
+      if (fs.existsSync(file)) {
+        fs.unlinkSync(file);
+        console.log(`[MAIN] 🗑️ Imagen eliminada: ${path.basename(file)}`);
+      }
+    }
+
+    console.log(`[MAIN] ✅ Juego "${gameId}" eliminado del library.json`);
+    event.sender.send("delete-game-success");
+  } catch (error) {
+    console.error("[MAIN] ❌ Error al eliminar juego:", error);
+    event.sender.send("delete-game-error", error.message);
+  }
+});
+
 ipcMain.handle("get-language", () => {
   return getValue("lang") || "es";
 });
@@ -442,11 +516,12 @@ function createEditWindow(game, index) {
 
   editWin = new BrowserWindow({
     width: 500,
-    height: 700,
+    height: 570,
     resizable: false,
     minimizable: false,
     maximizable: false,
     modal: true,
+    frame: false,
     autoHideMenuBar: true, // oculta la cinta de opciones (File, Edit, Select, Window)
     parent: BrowserWindow.getFocusedWindow(),
     webPreferences: {

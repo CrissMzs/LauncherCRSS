@@ -5,8 +5,11 @@
   "edit_game": "Editar juego",
   "save": "Guardar",
   "reload": "Recargar",
+  "restart": "Reiniciar",
   "close": "Cerrar",
   "cancel": "Cancelar",
+  "delete": "Eliminar",
+  "editModalTitle": "Editar Juego",
   "id": "ID:",
   "title": "Titulo",
   "genere": "Genero",
@@ -19,6 +22,7 @@
   "language": "Idioma",
   "username": "Nombre de usuario",
   "play": "Jugar",
+  "keyEdit": "Editar",
   "keyUp": "Arriba",
   "keyDown": "Abajo",
   "keyLeft": "Izquierda",
@@ -29,5 +33,10 @@
   "arrowup": "↑",
   "arrowdown": "↓",
   "arrowleft": "←",
-  "arrowright": "→"
+  "arrowright": "→",
+  "deleteConfirmation": "¿Estás seguro que quieres eliminar este juego?",
+  "deleteConfirmationTitle": "Confirmar eliminación",
+  "cancelButton": "Cancelar",
+  "deleteButton": "Eliminar",
+  "colorEdit": "Colores de Background"
 }

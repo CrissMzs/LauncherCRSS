@@ -213,6 +213,7 @@ let navbarIndex = 0;
 let controlIndex = 0;
 
 // 🕹️ Cargar teclas configuradas por el usuario
+const keyEdit = (getValue("keyEdit") || "w").toLowerCase();
 const keyUp = (getValue("keyUp") || "w").toLowerCase();
 const keyDown = (getValue("keyDown") || "s").toLowerCase();
 const keyLeft = (getValue("keyLeft") || "a").toLowerCase();
@@ -323,7 +324,7 @@ window.addEventListener("keydown", (e) => {
       break;
 
     // 📝 Editar (E) → no depende de configuración
-    case key === "e":
+    case key === keyEdit:
       if (currentSection === "gallery") {
         const library = getLibrary();
         const game = library[currentIndex];

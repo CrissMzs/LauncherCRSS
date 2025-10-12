@@ -12,11 +12,23 @@ const keyInputs = {
   keyLeft: document.getElementById("keyLeft-input"),
   keyRight: document.getElementById("keyRight-input"),
   keyAction: document.getElementById("keyAction-input"),
+  keyEdit: document.getElementById("keyEdit-input"),
 };
 
 let isFirstOpen = false;
 const closeBtn = document.getElementById("closeBtn");
 const submit = document.getElementById("submit");
+const resetColorsBtn = document.getElementById("resetColors");
+
+// 🎨 Colores por defecto
+const defaultColors = {
+  colorBG1: "1a1919",
+  colorBG2: "3d3d3d",
+  colorBG3: "242424",
+  colorBG4: "111111",
+};
+
+const colorPickers = ["colorBG1", "colorBG2", "colorBG3", "colorBG4"];
 
 // 🧩 Cargar valores actuales
 ipcRenderer.on("isFirstOpen", (event, data) => {
@@ -35,13 +47,19 @@ ipcRenderer.on("isFirstOpen", (event, data) => {
     if (value) {
       // Si es un espacio en blanco, mostrar como "SPACE"
       if (value === " ") value = "SPACE";
-
       keyInputs[key].value = value.toUpperCase();
     }
   });
+
+  // 🎨 Rellenar color pickers
+  colorPickers.forEach((key) => {
+    const input = document.getElementById(key);
+    const savedValue = getValue(key) || defaultColors[key];
+    input.value = `#${savedValue}`;
+  });
 });
 
-// 🕹️ Al enfocar una caja, esperamos la siguiente tecla presionada
+// 🕹️ Al enfocar una caja de tecla, esperamos la siguiente tecla presionada
 Object.keys(keyInputs).forEach((keyName) => {
   const input = keyInputs[keyName];
 
@@ -53,6 +71,21 @@ Object.keys(keyInputs).forEach((keyName) => {
     e.preventDefault();
     const key = e.key === " " ? "SPACE" : e.key.toUpperCase();
     input.value = key;
+  });
+});
+
+// 🎨 Escuchar cambios en los color pickers (solo vista previa, no guardan)
+// 🎨 Color pickers — solo modifican visualmente el input, sin guardar ni enviar nada
+colorPickers.forEach((key) => {
+  const input = document.getElementById(key);
+
+  // Cargar valor actual o por defecto
+  const savedValue = getValue(key) || defaultColors[key];
+  input.value = `#${savedValue}`;
+
+  // Si lo mueves, solo cambia en pantalla (sin guardar, sin refresh)
+  input.addEventListener("input", () => {
+    // no hace nada más — sólo cambia visualmente
   });
 });
 
@@ -77,6 +110,13 @@ form.addEventListener("submit", (e) => {
     }
   });
 
+  // Guardar colores de fondo
+  colorPickers.forEach((key) => {
+    const input = document.getElementById(key);
+    const hex = input.value.replace("#", "");
+    setValue(key, hex);
+  });
+
   // Enviar todo al main
   ipcRenderer.send("set-controls", controls);
 
@@ -84,10 +124,22 @@ form.addEventListener("submit", (e) => {
   window.close();
 });
 
+
+// 🔻 Cerrar modal
 closeBtn.addEventListener("click", () => {
   window.close();
 });
 
+// 🌍 Actualizar traducciones dinámicamente
 ipcRenderer.on("set-language", (event, lang) => {
   initI18n(lang);
 });
+
+resetColorsBtn.addEventListener("click", () => {
+  colorPickers.forEach((key) => {
+    const input = document.getElementById(key);
+    const savedValue = defaultColors[key];
+    input.value = `#${savedValue}`;
+  });
+});
+
