@@ -15,30 +15,25 @@ A customizable game launcher inspired by the PlayStation 5 interface, built with
   * Add new games with custom cover, background, and logo images.
     ![LauncherCRSS Screenshot](./assets/screenshot5.png)
   * Edit existing entries.
+    ![LauncherCRSS Screenshot](./assets/screenshot7.png)
   * Automatically reorder recently played games to the top.
-* 🌌 Configurable particle effects, (Not yet in front-end).
-* 🔄 Dynamic UI reload after edits — no restart required.
 * ⚙️ Configuration menu
   ![LauncherCRSS Screenshot](./assets/screenshot2.png)
   * Username
   * Language (En/Es)
+  * Controls
+  * Background Colors
+* 🌌 Configurable background colors.
+  ![LauncherCRSS Screenshot](./assets/screenshot6.png)
+* 🔄 Dynamic UI reload after edits — no restart required.
 
-## 🎮 Controls
+## 🎮 Controls (Customizable)
 
 - **SPACE** → Launch selected game or Add a New Game
 - **E** → Edit selected game  
 - **A / D** → Navigate through games
 - **W / S** → Navigate through navbar/games
 
-## 🧰 Requirements
-
-* Node.js
-* Windows 10/11 (primary support) — may work on Linux with adjustments.
-
-## **Particles are in beta** — this feature may have visual glitches.
-
-![LauncherCRSS Screenshot](./assets/screenshot3.png)
-![LauncherCRSS Screenshot](./assets/screenshot4.png)
 
 ### 📝 License
 
